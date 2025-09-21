@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranking GEFIN - Salto Vertical (Super Mario Edition)</title>
+  <title>Ranking GEFIN - Salto Vertical (Minecraft Edition)</title>
   <style>
-    /* Importa fonte pixelizada */
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
     :root {
@@ -20,18 +19,49 @@
     body {
       font-family: 'VT323', monospace;
       background-color: var(--mario-sky);
-      /* Imagens embutidas para o fundo do Mario (céu e chão) */
-      background-image: 
-        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg=='),
-        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFRSURBVHhe7dJBEsQwCAPBCfk/d7cIIZpA2Lq7W1AChAAAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCED+5gE23EYkU6l0mAAAAABJRU5ErkJggg==');
-      background-repeat: repeat-x, repeat-x;
-      background-position: top 20px, bottom;
-      background-size: auto, 100% 150px;
       color: var(--text-color);
       text-align: center;
       padding: 20px 5%;
       overflow-x: hidden;
       position: relative;
+    }
+
+    .background-container {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: -1;
+        image-rendering: pixelated;
+    }
+
+    .clouds-far, .clouds-near, .ground {
+        position: absolute;
+        left: 0;
+        width: 200%; /* Dobro da largura para scroll contínuo */
+        height: 100%;
+        background-repeat: repeat-x;
+    }
+
+    .clouds-far {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg==');
+        background-position: top 20px;
+        animation: scroll-bg 40s linear infinite;
+    }
+    .clouds-near {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg==');
+        background-position: top 40px;
+        animation: scroll-bg 20s linear infinite;
+    }
+    .ground {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFRSURBVHhe7dJBEsQwCAPBCfk/d7cIIZpA2Lq7W1AChAAAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCED+5gE23EYkU6l0mAAAAABJRU5ErkJggg==');
+        background-position: bottom;
+        background-size: auto 150px;
+        animation: scroll-bg 10s linear infinite;
+    }
+
+    @keyframes scroll-bg {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
     }
 
     h1 {
@@ -40,17 +70,11 @@
       text-shadow: 3px 3px #000;
       margin-bottom: 30px;
       font-size: clamp(1.8rem, 5vw, 2.5rem);
-      animation: title-bounce 1s infinite alternate;
       padding: 15px;
       border: 5px solid #000;
       background-color: var(--mario-brick);
       display: inline-block;
       box-shadow: 0 8px 0 #000;
-    }
-
-    @keyframes title-bounce {
-      from { transform: translateY(0px); }
-      to { transform: translateY(-10px); }
     }
 
     #loading-message {
@@ -73,15 +97,11 @@
       background: rgba(0, 0, 0, 0.7);
       border: 5px solid #000;
       box-shadow: 0 8px 0 #000;
-      visibility: hidden;
-      opacity: 0;
+      visibility: hidden; opacity: 0;
       transition: opacity 1s ease-in-out;
     }
     
-    table.loaded {
-      visibility: visible;
-      opacity: 1;
-    }
+    table.loaded { visibility: visible; opacity: 1; }
 
     th, td {
       padding: 15px;
@@ -91,69 +111,81 @@
     }
 
     th {
-      background: var(--mario-pipe);
-      color: #fff;
-    }
-
-    tbody tr:hover {
-      background-color: var(--mario-qblock);
+      background: var(--mario-qblock);
       color: #000;
-      cursor: pointer;
+      cursor: help;
+      position: relative;
+      transition: transform 0.1s;
     }
+    th:hover { transform: translateY(-5px); }
 
-    .top1 { background: var(--mario-star) !important; color: #000; font-size: 1.4rem; font-weight: bold; }
-    .top2 { background: var(--mario-mushroom) !important; color: #fff; font-size: 1.3rem; font-weight: bold; }
-    .top3 { background: var(--mario-fireflower) !important; color: #fff; font-size: 1.2rem; font-weight: bold; }
+    .top1 { background: repeating-linear-gradient(45deg, #FFEA00, #FFEA00 10px, #FFD700 10px, #FFD700 20px) !important; color: #000; font-size: 1.4rem; animation: star-shimmer 0.5s infinite; }
+    .top2 { background: #E53935 !important; }
+    .top3 { background: #FF9800 !important; }
+
+    @keyframes star-shimmer {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.2); }
+    }
 
     .medal {
       font-size: 1.8rem;
-      animation: medal-spin 1.5s linear infinite;
       display: inline-block;
     }
 
-    @keyframes medal-spin {
-      from { transform: rotateY(0deg); }
-      to { transform: rotateY(360deg); }
-    }
-    
     #hero {
-      width: 48px;
-      height: 64px;
-      /* Imagem do Mario embutida */
-      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAAD0eI4jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVHhe7dJNKwRRFAbg/+9+lwghIgmFkGhIKGkhIWRDIbFQyAb5A1JISCFRyEJCkjdIssF/yGYjP4qEbEOh5e7s6p7pGvA5s3tmt2f/zJk5s3t3d3eP5/f7L/N8Ph8LAIA/4/P5fPz+AQAAvs7n8/ECAAB/yufz8QIAAABAAAAAAAAAAAAAAAAAAAAAAAAA/yK63ySAcuuLKCwzPst3dEA5Y1WpTtViT8ICb2Z4l+8eQDEKDeVWeYhX5GZ4lu8eQI0sN5Vr5CYg8xOW4Vu+ewB1srJSrRbyEpSZgV+9+e4BFCvLhXwtp/wEpcxQz/I9AChWlgO5hTwhLwEBM8zzPQEoVpYKuVZOPIFfBpgYnucbgLJSrRZyjJzkE/gqQJTB8z0BKKuLhXwhL/EJTDDM8z0BKCvdQp4QH/EEZpjlex9QrCwX8kO8xCdQxPB9D6BY6S7kC/EJnGB4vucBxUq/kAfEJzABDM/3PKBYKZdyjfgEJiDm+Z4HVCvLhXwhLuITWJjh+Z4HVCvlQu4Ql/gENsxwPAQAyq1cKxdxj7jEJfAQAChXloP4jbjEJ/ADAEBllQt5Q1ziEpSA+R4AFCvdQ1ziEpSA+R4AFCvdQ1ziEpSA+R4AFL1/AH5L6BHF2bcoAAAAAElFTkSuQmCC') 0 0;
+      width: 48px; height: 64px;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAAD0eI4jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVHhe7dJNKwRRFAbg/+9+lwghIgmFkGhIKGkhIWRDIbFQyAb5A1JISCFRyEJCkjdIssF/yGYjP4qEbEOh5e7s6p7pGvA5s3tmt2f/zJk5s3t3d3eP5/f7L/N8Ph8LAIA/4/P5fPz+AQAAvs7n8/ECAAB/yufz8QIAAABAAAAAAAAAAAAAAAAAAAAAAAAA/yK63ySAcuuLKCwzPst3dEA5Y1WpTtViT8ICb2Z4l+8eQDEKDeVWeYhX5GZ4lu8eQI0sN5Vr5CYg8xOW4Vu+ewB1srJSrRbyEpSZgV+9+e4BFCvLhXwtp/wEpcxQz/I9AChWlgO5hTwhLwEBM8zzPQEoVpYKuVZOPIFfBpgYnucbgLJSrRZyjJzkE/gqQJTB8z0BKKuLhXwhL/EJTDDM8z0BKCvdQp4QH/EEZpjlex9QrCwX8kO8xCdQxPB9D6BY6S7kC/EJnGB4vucBxUq/kAfEJzABDM/3PKBYKZdyjfgEJiDm+Z4HVCvLhXwhLuITWJjh+Z4HVCvlQu4Ql/gENsxwPAQAyq1cKxdxj7jEJfAQAChXloP4jbjEJ/ADAEBllQt5Q1ziEpSA+R4AFCvdQ1ziEpSA+R4AFCvdQ1ziEpSA+R4AFL1/AH5L6BHF2bcoAAAAAElFTSuQmCC') 0 0;
       position: fixed;
-      bottom: 85px;
-      left: 0;
-      animation: hero-run 0.5s steps(4) infinite, hero-move 15s linear infinite;
+      bottom: 85px; left: 0;
+      animation: hero-run 0.5s steps(4) infinite, hero-move 20s linear infinite;
       z-index: 100;
       image-rendering: pixelated;
     }
 
-    @keyframes hero-run {
-      from { background-position: 0 0; }
-      to { background-position: -192px 0; }
-    }
-
-    @keyframes hero-move {
-      0% { transform: translateX(-50px); }
-      100% { transform: translateX(100vw); }
-    }
-    
+    @keyframes hero-run { from { background-position: 0 0; } to { background-position: -192px 0; } }
+    @keyframes hero-move { 0% { transform: translateX(-50px); } 100% { transform: translateX(100vw); } }
     #hero.jump {
-      animation: hero-jump 0.5s steps(1) 1, hero-move 15s linear infinite;
-      background-position: -192px 0; /* Frame do pulo */
+      animation: hero-jump 0.5s steps(1) 1, hero-move 20s linear infinite;
+      background-position: -192px 0;
+    }
+    @keyframes hero-jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-100px); } }
+
+    .coin-animation {
+        position: fixed;
+        width: 32px; height: 32px;
+        background: url('data:image/gif;base64,R0lGODlhEAAQAMQAAOR4q/y9w/y+w/q7v/y8w+Fwp/a4ufm6vfa5u/e5u/i6vP+/xfl7w/q8wP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkKAAIALAAAAAAQABAAAAVRICaIZrrs/k2YF4sEADBwGKAwDSM2geSxGggJg9MgSAY0js3D4zB4xCiA4Ew0H48RyOT4cQqKISCwL0SAhcgYTMsHiQkEQgJhAgwICg0HDxETDQ8aCRAiCQUjCQ8bFRUPEhMRBghyTk5Ojo8DAgMMCH8kCgYICg8bERMKfEcUkpIDM0ELCQoEDhYfExkSvb4bLwUFBAgJCg4TFxkaurweFxERAQIKCw4RFhsawgQVERIAAgsLDhEWGRrJAxUUDRIAOw==') no-repeat center center;
+        background-size: contain;
+        z-index: 200;
+        animation: coin-pop 0.5s ease-out forwards;
+        pointer-events: none;
     }
 
-    @keyframes hero-jump {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-100px); }
+    @keyframes coin-pop {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-150px) scale(0.5); opacity: 0; }
     }
-    
+
+    #course-clear {
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        font-family: 'Press Start 2P', cursive;
+        font-size: 3rem;
+        color: #fff;
+        text-shadow: 4px 4px #000;
+        opacity: 0;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        pointer-events: none;
+        z-index: 300;
+    }
+    #course-clear.visible {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
     @media (max-width: 768px) {
-      body {
-          padding: 10px;
-          background-size: auto, 100% 120px;
-      }
+      body { padding: 10px; background-size: auto, 100% 120px; }
       h1 { font-size: 1.5rem; }
       table { width: 95%; }
       td, th { padding: 10px; font-size: 1rem; }
@@ -162,17 +194,23 @@
   </style>
 </head>
 <body>
+  <div class="background-container">
+      <div class="clouds-far"></div>
+      <div class="clouds-near"></div>
+      <div class="ground"></div>
+  </div>
   
-  <h1>⭐ Ranking GEFIN - Salto Vertical 🍄</h1>
+  <h1 id="main-title">⛏️ Ranking GEFIN - Salto Vertical 🌲</h1>
   
   <p id="loading-message">PRESS START</p>
+  <div id="course-clear">COURSE CLEAR!</div>
   
   <table id="ranking">
     <thead>
       <tr>
-        <th>Posição</th>
-        <th>Nomes</th>
-        <th>Altura (cm)</th>
+        <th>?</th>
+        <th>?</th>
+        <th>?</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -183,7 +221,8 @@
   <audio id="start-sound" src="https://actions.google.com/sounds/v1/games/game_start.ogg" preload="auto"></audio>
   <audio id="coin-sound" src="https://actions.google.com/sounds/v1/arcade_games/coin_collect.ogg" preload="auto"></audio>
   <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/arcade_games/power_up.ogg" preload="auto"></audio>
-  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/sports/swoosh_and_jump.ogg" preload="auto"></audio>
+  <audio id="block-bump-sound" src="https://actions.google.com/sounds/v1/impacts/concrete_block_hit.ogg" preload="auto"></audio>
+  <audio id="course-clear-sound" src="https://actions.google.com/sounds/v1/games/fanfare_celebratory.ogg" preload="auto"></audio>
 
   <script>
     const publicSpreadsheetUrl = 
@@ -204,8 +243,7 @@
 
       } catch (error) {
         console.error("Falha ao carregar ranking:", error);
-        const loadingMessage = document.getElementById('loading-message');
-        loadingMessage.textContent = "GAME OVER";
+        document.getElementById('loading-message').textContent = "GAME OVER";
       }
     }
 
@@ -216,24 +254,42 @@
       return lines.slice(1).map(line => {
         const values = line.split(',').map(value => value.trim());
         let entry = {};
-        headers.forEach((header, index) => {
-          entry[header] = values[index] || '';
-        });
+        headers.forEach((header, index) => { entry[header] = values[index] || ''; });
         return entry;
       }).filter(item => item.Nomes && item["Altura máxima (cm)"]);
+    }
+
+    function animateCountUp(element, finalValue) {
+        let current = 0;
+        const step = Math.max(1, Math.floor(finalValue / 30));
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= finalValue) {
+                element.textContent = finalValue;
+                clearInterval(timer);
+            } else {
+                element.textContent = current;
+            }
+        }, 25);
     }
     
     async function showInfo(data) {
       data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
       const tbody = document.querySelector("#ranking tbody");
+      const blockBumpSound = document.getElementById('block-bump-sound');
+      document.querySelectorAll('th').forEach(th => {
+          th.addEventListener('mouseover', () => {
+              blockBumpSound.currentTime = 0;
+              blockBumpSound.play().catch(e => {});
+          });
+      });
       tbody.innerHTML = "";
-      const hoverSound = document.getElementById("hover-sound");
 
       for (const [index, item] of data.entries()) {
-        await new Promise(r => setTimeout(r, 200));
-        document.getElementById("coin-sound").play().catch(e => {});
+        await new Promise(r => setTimeout(r, 300));
 
         const row = document.createElement("tr");
+        const score = parseInt(item["Altura máxima (cm)"], 10) || 0;
         
         let medal = "";
         if(index === 0) { 
@@ -245,22 +301,37 @@
             setTimeout(() => hero.classList.remove('jump'), 500);
         }
         else if(index === 1) { row.classList.add("top2"); medal = "🍄"; }
-        else if(index === 2) { row.classList.add("top3"); medal = "🌸"; } // Flor de fogo
+        else if(index === 2) { row.classList.add("top3"); medal = "🌸"; }
         
         row.innerHTML = `
           <td>${index + 1}º <span class="medal">${medal}</span></td>
           <td>${item.Nomes}</td> 
-          <td>${item["Altura máxima (cm)"]}</td>
+          <td class="score-cell">0</td>
         `;
-        
-        row.addEventListener('mouseover', () => {
-          hoverSound.currentTime = 0;
-          hoverSound.play().catch(e => {});
-        });
-        
         tbody.appendChild(row);
+
+        animateCountUp(row.querySelector('.score-cell'), score);
+
+        const coin = document.createElement('div');
+        coin.className = 'coin-animation';
+        const rowRect = row.getBoundingClientRect();
+        coin.style.left = `${rowRect.left + rowRect.width / 2 - 16}px`;
+        coin.style.top = `${rowRect.top + rowRect.height / 2 - 16}px`;
+        document.body.appendChild(coin);
+        document.getElementById("coin-sound").play().catch(e => {});
+        setTimeout(() => coin.remove(), 500);
       }
+
+      // Animação de "Course Clear" no final
+      await new Promise(r => setTimeout(r, 1000));
+      const courseClear = document.getElementById('course-clear');
+      courseClear.classList.add('visible');
+      document.getElementById('course-clear-sound').play().catch(e => {});
+      setTimeout(() => courseClear.classList.remove('visible'), 3000);
     }
+
+    // Troca o título de volta ao original (sem o emoji de picareta)
+    document.getElementById('main-title').innerHTML = "🏆 Ranking GEFIN - Salto Vertical 🌲";
 
     window.addEventListener("DOMContentLoaded", loadRankingData);
   </script>
