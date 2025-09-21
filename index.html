@@ -2,175 +2,139 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ranking GEFIN - Arcade</title>
+  <title>Ranking GEFIN - Arcade Turbo Edition!</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+    :root {
+      --arcade-yellow: #ffcc00;
+      --arcade-red: #ff0066;
+      --arcade-blue: #00ffff;
+      --arcade-green: #00ff00;
+    }
+
     body {
       font-family: 'Press Start 2P', cursive;
-      background: linear-gradient(180deg, #111, #222);
+      background: #0a0a0a; /* Fundo mais escuro */
       color: #fff;
       text-align: center;
       padding: 20px;
+      overflow: hidden; /* Para o fundo animado */
+      position: relative;
     }
 
+    /* Fundo Animado - Partículas */
+    .bg-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      background: 
+        radial-gradient(circle, #00ffff 1px, transparent 1px) 0 0 / 10px 10px,
+        radial-gradient(circle, #00ff00 1px, transparent 1px) 5px 5px / 10px 10px;
+      animation: bg-scroll 60s linear infinite;
+    }
+
+    @keyframes bg-scroll {
+      from { background-position: 0 0; }
+      to { background-position: 100% 100%; }
+    }
+
+
     h1 {
-      color: #ffcc00;
+      color: var(--arcade-yellow);
       text-shadow: 2px 2px #000;
       margin-bottom: 30px;
-      font-size: 22px;
+      font-size: 24px; /* Aumentei um pouco */
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      padding: 5px 10px;
+      border: 2px solid var(--arcade-yellow);
+      box-shadow: 0 0 10px var(--arcade-yellow);
     }
+
+    h1 span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Efeito de glitch no título */
+    h1::before, h1::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--arcade-yellow);
+      transform: translateX(-100%);
+      animation: glitch-slide 3s infinite alternate ease-in-out;
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    h1::after {
+      background: var(--arcade-blue);
+      animation-delay: 0.5s;
+    }
+
+    @keyframes glitch-slide {
+      0%, 100% { transform: translateX(-100%); }
+      20%, 80% { transform: translateX(0%); }
+    }
+
 
     table {
       margin: 0 auto;
       border-collapse: collapse;
-      width: 70%;
-      background: #000;
-      box-shadow: 0 0 15px #ffcc00;
-      border: 4px solid #ffcc00;
+      width: 80%; /* Levemente mais largo */
+      background: #000000d0; /* Fundo semi-transparente para o fundo de partículas */
+      box-shadow: 0 0 20px var(--arcade-yellow), 0 0 30px var(--arcade-red); /* Mais brilho */
+      border: 5px solid var(--arcade-yellow); /* Borda mais grossa */
+      animation: table-entry 1s ease-out forwards;
+      backdrop-filter: blur(2px); /* Efeito de blur no fundo da tabela */
+    }
+
+    @keyframes table-entry {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     th, td {
       padding: 15px;
-      border: 2px solid #ffcc00;
-      font-size: 14px;
-    }
-
-    th {
-      background: #ff0066;
-      color: #fff;
+      border: 2px solid var(--arcade-yellow);
+      font-size: 15px; /* Levemente maior */
       text-shadow: 1px 1px #000;
     }
 
+    th {
+      background: var(--arcade-red);
+      color: #fff;
+      text-shadow: 1px 1px #000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
     tr:nth-child(even) {
-      background: #111;
+      background: #111111d0;
     }
 
     tr:nth-child(odd) {
-      background: #222;
+      background: #222222d0;
     }
 
     .top1 {
       background: #ffd700 !important;
       color: #000;
-      font-size: 16px;
+      font-size: 18px; /* Maior destaque */
+      font-weight: bold;
+      animation: top1-glow 1.5s infinite alternate; /* Animação de brilho para o Top 1 */
     }
 
     .top2 {
-      background: #c0c0c0 !important;
-      color: #000;
-      font-size: 15px;
-    }
-
-    .top3 {
-      background: #cd7f32 !important;
-      color: #000;
-      font-size: 15px;
-    }
-
-    .medal {
-      font-size: 18px;
-    }
-
-    /* Animação arcade */
-    @keyframes blink {
-      0%, 50%, 100% { opacity: 1; }
-      25%, 75% { opacity: 0; }
-    }
-
-    h1 span {
-      animation: blink 1.2s infinite;
-    }
-  </style>
-</head>
-<body>
-  <h1>🏆 <span>Ranking GEFIN</span> – Salto Vertical 🕹️</h1>
-  <table id="ranking">
-    <thead>
-      <tr>
-        <th>Posição</th>
-        <th>Nomes</th>
-        <th>Altura máxima (cm)</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <audio id="coin" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="levelup" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-
-  <script>
-    // Link da sua planilha (confirmado por você)
-    const publicSpreadsheetUrl = 
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
-
-    // Função para carregar os dados usando a tecnologia nativa do navegador
-    async function loadRankingData() {
-      try {
-        const response = await fetch(publicSpreadsheetUrl);
-        if (!response.ok) {
-          throw new Error('Erro ao buscar os dados da planilha.');
-        }
-        const csvText = await response.text();
-        const data = parseCSV(csvText);
-        showInfo(data);
-      } catch (error) {
-        console.error("Falha ao carregar o ranking:", error);
-        const tbody = document.querySelector("#ranking tbody");
-        tbody.innerHTML = '<tr><td colspan="3">Não foi possível carregar os dados. Verifique a planilha.</td></tr>';
-      }
-    }
-
-    // Função auxiliar para converter o texto CSV em um objeto que podemos usar
-    function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      const headers = lines[0].split(',').map(header => header.trim());
-      const rows = lines.slice(1).map(line => {
-        const values = line.split(',').map(value => value.trim());
-        let entry = {};
-        headers.forEach((header, index) => {
-          entry[header] = values[index];
-        });
-        return entry;
-      });
-      return rows;
-    }
-    
-    // Função para exibir os dados na tabela e tocar os sons
-    function showInfo(data) {
-      document.getElementById("coin").play().catch(e => console.log("Navegador bloqueou o áudio automático."));
-
-      // Ordenar por altura máxima (do maior para o menor)
-      data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
-
-      const tbody = document.querySelector("#ranking tbody");
-      tbody.innerHTML = "";
-
-      data.forEach((item, index) => {
-        const row = document.createElement("tr");
-
-        let medal = "";
-        if(index === 0) { row.classList.add("top1"); medal = "🥇"; playLevelUp(); }
-        else if(index === 1) { row.classList.add("top2"); medal = "🥈"; playLevelUp(); }
-        else if(index === 2) { row.classList.add("top3"); medal = "🥉"; playLevelUp(); }
-        
-        row.innerHTML = `
-          <td>${index + 1}º <span class="medal">${medal}</span></td>
-          <td>${item.Nomes}</td> 
-          <td>${item["Altura máxima (cm)"]}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    function playLevelUp() {
-      const sound = document.getElementById("levelup");
-      sound.currentTime = 0;
-      sound.play().catch(e => console.log("Navegador bloqueou o áudio automático."));
-    }
-
-    // Chama a função para carregar os dados quando a página carregar
-    window.addEventListener("DOMContentLoaded", loadRankingData);
-  </script>
-</body>
-</html>
+      background: #c0c0c0 !important
+      
