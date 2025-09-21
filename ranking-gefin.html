@@ -2,84 +2,90 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ranking GEFIN – Online</title>
+  <title>Ranking GEFIN</title>
   <style>
     body {
-      font-family: 'Press Start 2P', cursive;
-      background: #1a1a1a;
-      color: #fff;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
       text-align: center;
-      margin: 0;
       padding: 20px;
     }
     h1 {
-      color: #ffcc00;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px #000;
+      color: #333;
     }
-    .leaderboard {
-      max-width: 600px;
-      margin: auto;
-      background: #2c2c2c;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 60%;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .player {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #333;
-      margin: 8px 0;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 14px;
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
     }
-    .player:first-child { background: #ffcc00; color: #000; font-weight: bold; }
-    .player:nth-child(2) { background: #c0c0c0; color: #000; }
-    .player:nth-child(3) { background: #cd7f32; color: #000; }
-    .badge {
-      font-size: 12px;
-      background: #444;
-      padding: 4px 8px;
-      border-radius: 6px;
+    th {
+      background: #007bff;
+      color: white;
     }
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    .top1 { background: gold !important; font-weight: bold; }
+    .top2 { background: silver !important; font-weight: bold; }
+    .top3 { background: #cd7f32 !important; font-weight: bold; }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>🏆 Ranking GEFIN – Salto Vertical 🏆</h1>
-  <div class="leaderboard" id="ranking"></div>
+  <h1>🏆 Ranking de Saltos - GEFIN</h1>
+  <table id="ranking">
+    <thead>
+      <tr>
+        <th>Posição</th>
+        <th>Nomes</th>
+        <th>Altura máxima (cm)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <!-- Tabletop.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.4/tabletop.min.js"></script>
   <script>
-    const sheetID = https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pubhtml; // coloque o ID da sua planilha
-    const publicURL = `https://docs.google.com/spreadsheets/d/${sheetID}/pubhtml`;
+    // 🔗 Use a URL publicada da sua planilha
+    const publicSpreadsheetUrl = 
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
     function init() {
       Tabletop.init({
-        key: publicURL,
+        key: publicSpreadsheetUrl,
         simpleSheet: true,
-        callback: function(data) {
-          // Ordena pela altura do salto (decrescente)
-          data.sort((a,b) => b["Salto (cm)"] - a["Salto (cm)"]);
-          
-          const rankingDiv = document.getElementById("ranking");
-          data.forEach((row, index) => {
-            const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : (index+1)+"º";
-            const div = document.createElement("div");
-            div.className = "player";
-            div.innerHTML = `
-              <span>${medal} ${row.Nome}</span>
-              <span>${row["Salto (cm)"]} cm</span>
-              <span class="badge">${row.Badge || ""}</span>
-            `;
-            rankingDiv.appendChild(div);
-          });
-        }
+        callback: showInfo
       });
     }
+
+    function showInfo(data) {
+      // Ordenar por altura máxima (maior primeiro)
+      data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
+
+      const tbody = document.querySelector("#ranking tbody");
+      tbody.innerHTML = "";
+
+      data.forEach((item, index) => {
+        const row = document.createElement("tr");
+        if(index === 0) row.classList.add("top1");
+        if(index === 1) row.classList.add("top2");
+        if(index === 2) row.classList.add("top3");
+
+        row.innerHTML = `
+          <td>${index + 1}º</td>
+          <td>${item.Nomes}</td>
+          <td>${item["Altura máxima (cm)"]}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
     window.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
