@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranking GEFIN - Salto Vertical (Retro Wave Edition)</title>
+  <title>Ranking GEFIN - Salto Vertical (Retro Horizon Edition)</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
 
@@ -13,6 +13,12 @@
       --glow-yellow: #f7ff00;
       --background-dark: #0d0221;
       --background-purple: #261447;
+      --qblock-color: #e9c46a; /* Mantido caso queira usar em outro lugar */
+
+      /* Cores das novas montanhas para um visual mais "realista retro" */
+      --mountain-layer1: #1a0a38; /* Mais escuro, mais distante */
+      --mountain-layer2: #3a1e64;
+      --mountain-layer3: #5c358b; /* Mais claro, mais próximo */
     }
 
     body {
@@ -33,7 +39,8 @@
     }
     .sun {
         position: absolute;
-        top: 50%; left: 50%;
+        top: 45%; /* Um pouco mais alto */
+        left: 50%;
         transform: translate(-50%, -60%);
         width: 400px; height: 400px;
         background: radial-gradient(circle, var(--glow-yellow), transparent 60%);
@@ -45,16 +52,40 @@
         50% { box-shadow: 0 0 150px #fff; }
     }
 
-    .mountains {
+    /* Novas Montanhas CSS com múltiplas camadas */
+    .mountains-layer {
         position: absolute;
-        bottom: 0; left: -50%;
-        width: 200%; height: 50%;
+        bottom: 0;
+        left: 0;
+        width: 200%; /* Largura maior para scroll */
+        height: 50%; /* Altura base */
+        background-repeat: repeat-x;
+        background-position: bottom;
+        background-size: auto 100%;
+        z-index: 0; /* Abaixo dos outros elementos de primeiro plano */
+    }
+
+    .mountains-layer.layer-1 { /* Mais distante, mais escuro, mais lento */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%231a0a38" d="M0 250L100 200L200 220L300 180L400 240L500 190L600 210L700 160L800 230L900 170L1000 200V300H0Z"/></svg>');
+        height: 40%;
+        animation: scroll-mountains 60s linear infinite;
+        opacity: 0.9;
+    }
+    .mountains-layer.layer-2 {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%233a1e64" d="M0 200L100 220L200 180L300 240L400 190L500 210L600 160L700 230L800 170L900 200L1000 150V300H0Z"/></svg>');
+        height: 45%;
         animation: scroll-mountains 40s linear infinite;
+        opacity: 0.95;
+    }
+    .mountains-layer.layer-3 { /* Mais próximo, mais claro, mais rápido */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%235c358b" d="M0 180L100 190L200 150L300 200L400 160L500 180L600 130L700 190L800 140L900 170L1000 120V300H0Z"/></svg>');
+        height: 50%;
+        animation: scroll-mountains 25s linear infinite;
     }
 
     @keyframes scroll-mountains {
         from { transform: translateX(0%); }
-        to { transform: translateX(25%); }
+        to { transform: translateX(-50%); } /* Ajuste para scroll contínuo de 200% */
     }
 
     .grid {
@@ -67,6 +98,7 @@
         background-size: 80px 40px;
         transform: perspective(300px) rotateX(60deg);
         animation: move-grid 4s linear infinite;
+        z-index: 1; /* Acima das montanhas */
     }
     @keyframes move-grid {
         from { background-position: 0 0; }
@@ -74,24 +106,44 @@
     }
 
     .shooting-star {
-        position: fixed;
+        position: absolute;
         top: -10%;
-        width: 2px;
-        height: 150px;
+        width: 3px;
+        height: 180px;
         background: linear-gradient(to bottom, #fff, transparent);
         opacity: 0;
-        animation: shoot 5s linear infinite;
+        animation: shoot 8s linear infinite;
+        transform-origin: top center;
+        z-index: 2; /* Acima da grid */
     }
-    .shooting-star:nth-child(1) { left: 20%; animation-delay: 3s; }
-    .shooting-star:nth-child(2) { left: 50%; animation-delay: 7s; animation-duration: 4s; }
-    .shooting-star:nth-child(3) { left: 80%; animation-delay: 1s; animation-duration: 6s; }
+    .shooting-star:nth-child(1) { left: 15%; animation-delay: 3s; animation-duration: 7s; }
+    .shooting-star:nth-child(2) { left: 45%; animation-delay: 7s; animation-duration: 6s; }
+    .shooting-star:nth-child(3) { left: 75%; animation-delay: 1s; animation-duration: 9s; }
+    .shooting-star:nth-child(4) { left: 30%; animation-delay: 5s; animation-duration: 8s; }
+    .shooting-star:nth-child(5) { left: 60%; animation-delay: 9s; animation-duration: 5s; }
+
 
     @keyframes shoot {
-        0% { transform: translateY(0) rotate(-45deg); opacity: 0; }
-        20% { opacity: 1; }
-        100% { transform: translateY(120vh) rotate(-45deg); opacity: 0; }
+        0% { transform: translateY(0) translateX(0) rotate(-45deg); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translateY(120vh) translateX(50vw) rotate(-45deg); opacity: 0; }
     }
 
+    /* Floating Power-ups */
+    .floating-item {
+        position: absolute;
+        font-size: 30px;
+        opacity: 0;
+        animation: float-and-fade 10s linear infinite;
+        pointer-events: none;
+        z-index: 2; /* Acima da grid */
+    }
+    @keyframes float-and-fade {
+        0% { transform: translateY(100vh); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(-10vh); opacity: 0; }
+    }
 
     h1 {
       font-family: 'Press Start 2P', cursive;
@@ -103,7 +155,7 @@
         0 0 40px var(--glow-cyan);
       font-size: clamp(1.5rem, 5vw, 2.5rem);
       margin-bottom: 30px;
-      position: relative; /* Garante que o título fique sobre o fundo */
+      position: relative;
       z-index: 5;
     }
 
@@ -168,7 +220,15 @@
         to { box-shadow: 0 0 25px var(--glow-yellow), inset 0 0 10px var(--glow-yellow); }
     }
 
-    .medal { font-size: 1.5rem; display: inline-block; }
+    .medal { 
+        font-size: 1.5rem; 
+        display: inline-block;
+        animation: medal-bounce 1s infinite alternate;
+    }
+    @keyframes medal-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
 
     @media (max-width: 768px) {
       table, thead, tbody, th, td, tr { display: block; }
@@ -187,13 +247,17 @@
 <body>
   <div class="background-container">
       <div class="sun"></div>
-      <svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <path fill="#261447" fill-opacity="1" d="M0,192L48,176C96,160,192,128,288,133.3C384,139,480,181,576,186.7C672,192,768,160,864,138.7C960,117,1056,107,1152,122.7C1248,139,1344,181,1392,202.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-      </svg>
+      <div class="mountains-layer layer-1"></div>
+      <div class="mountains-layer layer-2"></div>
+      <div class="mountains-layer layer-3"></div>
+      
       <div class="grid"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
+      <div class="shooting-star" style="left: 15%;"></div>
+      <div class="shooting-star" style="left: 45%; animation-delay: 7s;"></div>
+      <div class="shooting-star" style="left: 75%; animation-delay: 1s;"></div>
+      <div class="shooting-star" style="left: 30%; animation-delay: 5s;"></div>
+      <div class="shooting-star" style="left: 60%; animation-delay: 9s;"></div>
+
   </div>
 
   <h1>Ranking GEFIN - Salto Vertical</h1>
@@ -214,6 +278,8 @@
   <audio id="start-sound" src="https://actions.google.com/sounds/v1/science_fiction/ambience_science_fiction.ogg" preload="auto"></audio>
   <audio id="row-sound" src="https://actions.google.com/sounds/v1/foley/whoosh.ogg" preload="auto"></audio>
   <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/science_fiction/power_up_2.ogg" preload="auto"></audio>
+  <audio id="qblock-hit-sound" src="https://actions.google.com/sounds/v1/games/coin_collect.ogg" preload="auto"></audio>
+
 
   <script>
     const publicSpreadsheetUrl = 
@@ -231,6 +297,7 @@
         document.getElementById('loading-message').style.display = 'none';
         document.getElementById('ranking').classList.add('loaded');
         await showInfo(data);
+        generateFloatingItems(); // Gerar elementos flutuantes (sem os blocos nas montanhas)
       } catch (error) {
         console.error("Falha na comunicação:", error);
         document.getElementById('loading-message').textContent = "FALHA NA TRANSMISSÃO";
@@ -302,6 +369,22 @@
         rowSound.currentTime = 0;
         rowSound.play().catch(e => {});
       }
+    }
+
+    // Função para gerar apenas os itens flutuantes, sem os q-blocks nas montanhas
+    function generateFloatingItems() {
+        const backgroundContainer = document.querySelector('.background-container');
+        const floatingItems = ['⭐', '❤️', '🍄', '⚡', '🌸'];
+        const numFloatingItems = 8;
+        for (let i = 0; i < numFloatingItems; i++) {
+            const item = document.createElement('div');
+            item.className = 'floating-item';
+            item.textContent = floatingItems[Math.floor(Math.random() * floatingItems.length)];
+            item.style.left = `${Math.random() * 90 + 5}%`;
+            item.style.animationDelay = `${Math.random() * 10}s`;
+            item.style.animationDuration = `${Math.random() * 8 + 7}s`;
+            backgroundContainer.appendChild(item);
+        }
     }
     
     window.addEventListener("DOMContentLoaded", loadRankingData);
