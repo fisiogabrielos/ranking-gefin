@@ -2,89 +2,78 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ranking GEFIN - Salto Vertical (Minecraft Edition)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking GEFIN - Salto Vertical (Super Mario Edition)</title>
   <style>
     /* Importa fonte pixelizada */
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
     :root {
-      --minecraft-grass: #558b2f;
-      --minecraft-dirt: #795548;
-      --minecraft-wood: #8d6e63;
-      --minecraft-stone: #757575;
-      --minecraft-gold: #ffeb3b;
-      --minecraft-diamond: #00bcd4;
-      --minecraft-lava: #ff5722;
-      --minecraft-water: #2196f3;
-      --text-color: #eee;
+      --mario-sky: #6B8CFF;
+      --mario-brick: #A13A0E;
+      --mario-qblock: #E9C46A;
+      --mario-coin: #FFD700;
+      --mario-pipe: #008000;
+      --text-color: #fff;
     }
 
     body {
-      font-family: 'VT323', monospace; /* Fonte mais "Minecraft" */
-      background-color: #78a7c2; /* Cor base do céu */
-      /* IMAGENS EMBUTIDAS DIRETAMENTE AQUI */
+      font-family: 'VT323', monospace;
+      background-color: var(--mario-sky);
+      /* Imagens embutidas para o fundo do Mario (céu e chão) */
       background-image: 
-        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg=='), /* Céu pixelizado */
-        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFRSURBVHhe7dJBEsQwCAPBCfk/d7cIIZpA2Lq7W1AChAAAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCED+5gE23EYkU6l0mAAAAABJRU5ErkJggg=='); /* Chão de blocos */
+        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg=='),
+        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFRSURBVHhe7dJBEsQwCAPBCfk/d7cIIZpA2Lq7W1AChAAAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCED+5gE23EYkU6l0mAAAAABJRU5ErkJggg==');
       background-repeat: repeat-x, repeat-x;
       background-position: top 20px, bottom;
       background-size: auto, 100% 150px;
       color: var(--text-color);
       text-align: center;
-      padding: 20px;
+      padding: 20px 5%;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Efeito de pixelização leve em todo o conteúdo */
-    .pixelated-content > * {
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
-    }
-
     h1 {
-      font-family: 'Press Start 2P', cursive; /* Título mais impactante */
-      color: var(--minecraft-gold);
-      text-shadow: 2px 2px #000, 4px 4px var(--minecraft-dirt);
+      font-family: 'Press Start 2P', cursive;
+      color: #fff;
+      text-shadow: 3px 3px #000;
       margin-bottom: 30px;
-      font-size: 32px;
-      animation: block-bounce 1s infinite alternate; /* Animação de bloco pulando */
-      padding: 10px 20px;
-      border: 4px solid var(--minecraft-stone);
-      background-color: var(--minecraft-wood);
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      animation: title-bounce 1s infinite alternate;
+      padding: 15px;
+      border: 5px solid #000;
+      background-color: var(--mario-brick);
       display: inline-block;
-      box-shadow: 6px 6px 0px 0px #000;
+      box-shadow: 0 8px 0 #000;
     }
 
-    @keyframes block-bounce {
+    @keyframes title-bounce {
       from { transform: translateY(0px); }
       to { transform: translateY(-10px); }
     }
 
-    /* Mensagem de Carregamento */
-    #loading-chunks {
-      font-size: 24px;
-      color: var(--minecraft-water);
+    #loading-message {
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      color: #fff;
       text-shadow: 2px 2px #000;
       margin-bottom: 30px;
-      animation: blink-minecraft 1.2s infinite steps(1); /* Pisca em pixels */
+      animation: blink-mario 1s infinite steps(1);
     }
     
-    @keyframes blink-minecraft {
+    @keyframes blink-mario {
       0% { opacity: 1; }
       50% { opacity: 0; }
-      100% { opacity: 1; }
     }
     
     table {
       margin: 40px auto;
-      border-collapse: collapse;
-      width: 80%;
-      background: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente escuro */
-      border: 5px solid var(--minecraft-stone);
-      box-shadow: 8px 8px 0px 0px #000;
-      visibility: hidden; /* Começa escondida */
+      width: 100%;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 5px solid #000;
+      box-shadow: 0 8px 0 #000;
+      visibility: hidden;
       opacity: 0;
       transition: opacity 1s ease-in-out;
     }
@@ -96,117 +85,89 @@
 
     th, td {
       padding: 15px;
-      border: 2px solid var(--minecraft-stone);
-      font-size: 18px;
-      text-shadow: 1px 1px #000;
-    }
-
-    th {
-      background: var(--minecraft-dirt);
-      color: var(--minecraft-gold);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    tbody tr {
-      transition: background-color 0.2s, color 0.2s, transform 0.1s ease-out;
-    }
-
-    tbody tr:nth-child(even) { background: rgba(20, 20, 20, 0.7); }
-    tbody tr:nth-child(odd) { background: rgba(30, 30, 30, 0.7); }
-
-    tbody tr:hover {
-      background-color: var(--minecraft-grass);
-      color: #fff;
-      transform: scale(1.01); /* Leve zoom ao passar o mouse */
-      cursor: pointer;
-    }
-
-    .top1 {
-      background: var(--minecraft-gold) !important;
-      color: #000;
-      font-size: 20px;
-      font-weight: bold;
-      animation: top1-shimmer 2s infinite alternate; /* Brilho de ouro */
-      border: 3px solid var(--minecraft-diamond); /* Borda de diamante */
-      box-shadow: 0 0 15px var(--minecraft-gold), 0 0 25px var(--minecraft-diamond);
-    }
-
-    @keyframes top1-shimmer {
-      from { background-color: var(--minecraft-gold); }
-      to { background-color: #ffda4a; }
-    }
-
-    .top2 { 
-      background: var(--minecraft-stone) !important; 
-      color: #fff; 
-      font-size: 19px; 
-      font-weight: bold; 
-      border: 3px solid var(--minecraft-stone);
-    }
-    .top3 { 
-      background: var(--minecraft-dirt) !important; 
-      color: #fff; 
-      font-size: 18px; 
-      font-weight: bold; 
-      border: 3px solid var(--minecraft-dirt);
-    }
-
-    .medal {
-      font-size: 28px; /* Medalhas maiores */
-      animation: medal-craft-pulse 1s infinite alternate;
-      display: inline-block;
+      border: 3px solid #000;
+      font-size: 1.2rem;
       text-shadow: 2px 2px #000;
     }
 
-    @keyframes medal-craft-pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); color: var(--minecraft-lava); }
+    th {
+      background: var(--mario-pipe);
+      color: #fff;
+    }
+
+    tbody tr:hover {
+      background-color: var(--mario-qblock);
+      color: #000;
+      cursor: pointer;
+    }
+
+    .top1 { background: var(--mario-star) !important; color: #000; font-size: 1.4rem; font-weight: bold; }
+    .top2 { background: var(--mario-mushroom) !important; color: #fff; font-size: 1.3rem; font-weight: bold; }
+    .top3 { background: var(--mario-fireflower) !important; color: #fff; font-size: 1.2rem; font-weight: bold; }
+
+    .medal {
+      font-size: 1.8rem;
+      animation: medal-spin 1.5s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes medal-spin {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
     }
     
-    /* Personagem 8-bit */
     #hero {
-        width: 48px;
-        height: 64px;
-        /* IMAGEM DO PERSONAGEM EMBUTIDA */
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAAD0eI4jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVHhe7dJNKwRRFAbg/+9+lwghIgmFkGhIKGkhIWRDIbFQyAb5A1JISCFRyEJCkjdIssF/yGYjP4qEbEOh5e7s6p7pGvA5s3tmt2f/zJk5s3t3d3eP5/f7L/N8Ph8LAIA/4/P5fPz+AQAAvs7n8/ECAAB/yufz8QIAAABAAAAAAAAAAAAAAAAAAAAAAAAA/yK63ySAcuuLKCwzPst3dEA5Y1WpTtViT8ICb2Z4l+8eQDEKDeVWeYhX5GZ4lu8eQI0sN5Vr5CYg8xOW4Vu+ewB1srJSrRbyEpSZgV+9+e4BFCvLhXwtp/wEpcxQz/I9AChWlgO5hTwhLwEBM8zzPQEoVpYKuVZOPIFfBpgYnucbgLJSrRZyjJzkE/gqQJTB8z0BKKuLhXwhL/EJTDDM8z0BKCvdQp4QH/EEZpjlex9QrCwX8kO8xCdQxPB9D6BY6S7kC/EJnGB4vucBxUq/kAfEJzABDM/3PKBYKZdyjfgEJiDm+Z4HVCvLhXwhLuITWJjh+Z4HVCvlQu4Ql/gENsxwPAQAyq1cKxdxj7jEJfAQAChXloP4jbjEJ/ADAEBllQt5Q1ziEpSA+R4AFCvdQ1ziEpSA+R4AFCvdQ1ziEpSA+R4AFL1/AH5L6BHF2bcoAAAAAElFTkSuQmCC') 0 0;
-        position: fixed;
-        bottom: 85px;
-        left: 0;
-        animation: hero-run 0.5s steps(4) infinite, hero-move 15s linear infinite;
-        z-index: 100;
-        image-rendering: pixelated; /* Garante que o personagem fique pixelado */
+      width: 48px;
+      height: 64px;
+      /* Imagem do Mario embutida */
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAAD0eI4jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVHhe7dJNKwRRFAbg/+9+lwghIgmFkGhIKGkhIWRDIbFQyAb5A1JISCFRyEJCkjdIssF/yGYjP4qEbEOh5e7s6p7pGvA5s3tmt2f/zJk5s3t3d3eP5/f7L/N8Ph8LAIA/4/P5fPz+AQAAvs7n8/ECAAB/yufz8QIAAABAAAAAAAAAAAAAAAAAAAAAAAAA/yK63ySAcuuLKCwzPst3dEA5Y1WpTtViT8ICb2Z4l+8eQDEKDeVWeYhX5GZ4lu8eQI0sN5Vr5CYg8xOW4Vu+ewB1srJSrRbyEpSZgV+9+e4BFCvLhXwtp/wEpcxQz/I9AChWlgO5hTwhLwEBM8zzPQEoVpYKuVZOPIFfBpgYnucbgLJSrRZyjJzkE/gqQJTB8z0BKKuLhXwhL/EJTDDM8z0BKCvdQp4QH/EEZpjlex9QrCwX8kO8xCdQxPB9D6BY6S7kC/EJnGB4vucBxUq/kAfEJzABDM/3PKBYKZdyjfgEJiDm+Z4HVCvLhXwhLuITWJjh+Z4HVCvlQu4Ql/gENsxwPAQAyq1cKxdxj7jEJfAQAChXloP4jbjEJ/ADAEBllQt5Q1ziEpSA+R4AFCvdQ1ziEpSA+R4AFCvdQ1ziEpSA+R4AFL1/AH5L6BHF2bcoAAAAAElFTkSuQmCC') 0 0;
+      position: fixed;
+      bottom: 85px;
+      left: 0;
+      animation: hero-run 0.5s steps(4) infinite, hero-move 15s linear infinite;
+      z-index: 100;
+      image-rendering: pixelated;
     }
 
     @keyframes hero-run {
-        from { background-position: 0 0; }
-        to { background-position: -192px 0; }
+      from { background-position: 0 0; }
+      to { background-position: -192px 0; }
     }
 
     @keyframes hero-move {
-        0% { transform: translateX(-50px); }
-        100% { transform: translateX(100vw); }
+      0% { transform: translateX(-50px); }
+      100% { transform: translateX(100vw); }
     }
     
     #hero.jump {
-        animation: hero-jump 0.5s steps(1), hero-move 15s linear infinite;
-        background-position: -192px 0;
+      animation: hero-jump 0.5s steps(1) 1, hero-move 15s linear infinite;
+      background-position: -192px 0; /* Frame do pulo */
     }
 
     @keyframes hero-jump {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-100px); }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-100px); }
     }
-
+    
+    @media (max-width: 768px) {
+      body {
+          padding: 10px;
+          background-size: auto, 100% 120px;
+      }
+      h1 { font-size: 1.5rem; }
+      table { width: 95%; }
+      td, th { padding: 10px; font-size: 1rem; }
+      #hero { bottom: 65px; }
+    }
   </style>
 </head>
 <body>
   
-  <h1>⛏️ Ranking GEFIN - Salto Vertical 🌲</h1>
+  <h1>⭐ Ranking GEFIN - Salto Vertical 🍄</h1>
   
-  <p id="loading-chunks">LOADING CHUNKS...</p>
+  <p id="loading-message">PRESS START</p>
   
-  <table id="ranking" class="pixelated-content">
+  <table id="ranking">
     <thead>
       <tr>
         <th>Posição</th>
@@ -219,10 +180,10 @@
 
   <div id="hero"></div>
 
-  <audio id="start-sound" src="https://actions.google.com/sounds/v1/games/fanfare_celebratory.ogg" preload="auto"></audio>
-  <audio id="item-collect" src="https://actions.google.com/sounds/v1/ambiences/objects_rattle.ogg" preload="auto"></audio>
-  <audio id="xp-sound" src="https://actions.google.com/sounds/v1/alarms/digital_alarm.ogg" preload="auto"></audio>
-  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/switches/switch_flick.ogg" preload="auto"></audio>
+  <audio id="start-sound" src="https://actions.google.com/sounds/v1/games/game_start.ogg" preload="auto"></audio>
+  <audio id="coin-sound" src="https://actions.google.com/sounds/v1/arcade_games/coin_collect.ogg" preload="auto"></audio>
+  <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/arcade_games/power_up.ogg" preload="auto"></audio>
+  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/sports/swoosh_and_jump.ogg" preload="auto"></audio>
 
   <script>
     const publicSpreadsheetUrl = 
@@ -236,16 +197,15 @@
         const csvText = await response.text();
         const data = parseCSV(csvText);
         
-        document.getElementById('loading-chunks').style.display = 'none';
+        document.getElementById('loading-message').style.display = 'none';
         
         await showInfo(data);
         document.getElementById('ranking').classList.add('loaded');
 
       } catch (error) {
-        console.error("Falha ao carregar o ranking:", error);
-        const loadingChunks = document.getElementById('loading-chunks');
-        loadingChunks.textContent = "EXPLOSION! DATA CORRUPTED.";
-        loadingChunks.style.color = 'var(--minecraft-lava)';
+        console.error("Falha ao carregar ranking:", error);
+        const loadingMessage = document.getElementById('loading-message');
+        loadingMessage.textContent = "GAME OVER";
       }
     }
 
@@ -260,7 +220,7 @@
           entry[header] = values[index] || '';
         });
         return entry;
-      });
+      }).filter(item => item.Nomes && item["Altura máxima (cm)"]);
     }
     
     async function showInfo(data) {
@@ -271,23 +231,21 @@
 
       for (const [index, item] of data.entries()) {
         await new Promise(r => setTimeout(r, 200));
-        document.getElementById("item-collect").play().catch(e => {});
+        document.getElementById("coin-sound").play().catch(e => {});
 
         const row = document.createElement("tr");
-        row.style.animation = 'row-pop-in 0.5s ease-out forwards';
         
         let medal = "";
         if(index === 0) { 
             row.classList.add("top1"); 
-            medal = "👑"; 
-            document.getElementById("xp-sound").play().catch(e => {});
-            // Faz o herói pular!
+            medal = "⭐"; 
+            document.getElementById("powerup-sound").play().catch(e => {});
             const hero = document.getElementById('hero');
             hero.classList.add('jump');
             setTimeout(() => hero.classList.remove('jump'), 500);
         }
-        else if(index === 1) { row.classList.add("top2"); medal = "🛡️"; }
-        else if(index === 2) { row.classList.add("top3"); medal = "⚔️"; }
+        else if(index === 1) { row.classList.add("top2"); medal = "🍄"; }
+        else if(index === 2) { row.classList.add("top3"); medal = "🌸"; } // Flor de fogo
         
         row.innerHTML = `
           <td>${index + 1}º <span class="medal">${medal}</span></td>
