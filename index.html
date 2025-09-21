@@ -96,29 +96,51 @@
     <tbody></tbody>
   </table>
 
-  <!-- Sons arcade -->
   <audio id="coin" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="levelup" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
-  <!-- Tabletop.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.4/tabletop.min.js"></script>
   <script>
+    // Link da sua planilha (confirmado por você)
     const publicSpreadsheetUrl = 
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pubhtml";
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
-    function init() {
-      Tabletop.init({
-        key: publicSpreadsheetUrl,
-        simpleSheet: true,
-        callback: showInfo
-      });
+    // Função para carregar os dados usando a tecnologia nativa do navegador
+    async function loadRankingData() {
+      try {
+        const response = await fetch(publicSpreadsheetUrl);
+        if (!response.ok) {
+          throw new Error('Erro ao buscar os dados da planilha.');
+        }
+        const csvText = await response.text();
+        const data = parseCSV(csvText);
+        showInfo(data);
+      } catch (error) {
+        console.error("Falha ao carregar o ranking:", error);
+        const tbody = document.querySelector("#ranking tbody");
+        tbody.innerHTML = '<tr><td colspan="3">Não foi possível carregar os dados. Verifique a planilha.</td></tr>';
+      }
     }
 
+    // Função auxiliar para converter o texto CSV em um objeto que podemos usar
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(header => header.trim());
+      const rows = lines.slice(1).map(line => {
+        const values = line.split(',').map(value => value.trim());
+        let entry = {};
+        headers.forEach((header, index) => {
+          entry[header] = values[index];
+        });
+        return entry;
+      });
+      return rows;
+    }
+    
+    // Função para exibir os dados na tabela e tocar os sons
     function showInfo(data) {
-      // Toca som de "coin insert" quando ranking carrega
-      document.getElementById("coin").play();
+      document.getElementById("coin").play().catch(e => console.log("Navegador bloqueou o áudio automático."));
 
-      // Ordenar por altura máxima
+      // Ordenar por altura máxima (do maior para o menor)
       data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
 
       const tbody = document.querySelector("#ranking tbody");
@@ -131,10 +153,10 @@
         if(index === 0) { row.classList.add("top1"); medal = "🥇"; playLevelUp(); }
         else if(index === 1) { row.classList.add("top2"); medal = "🥈"; playLevelUp(); }
         else if(index === 2) { row.classList.add("top3"); medal = "🥉"; playLevelUp(); }
-
+        
         row.innerHTML = `
-          <td>${index + 1}º ${medal}</td>
-          <td>${item.Nomes}</td>
+          <td>${index + 1}º <span class="medal">${medal}</span></td>
+          <td>${item.Nomes}</td> 
           <td>${item["Altura máxima (cm)"]}</td>
         `;
         tbody.appendChild(row);
@@ -144,11 +166,11 @@
     function playLevelUp() {
       const sound = document.getElementById("levelup");
       sound.currentTime = 0;
-      sound.play();
+      sound.play().catch(e => console.log("Navegador bloqueou o áudio automático."));
     }
 
-    window.addEventListener("DOMContentLoaded", init);
+    // Chama a função para carregar os dados quando a página carregar
+    window.addEventListener("DOMContentLoaded", loadRankingData);
   </script>
 </body>
 </html>
-
