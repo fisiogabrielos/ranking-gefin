@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ranking GEFIN – Online</title>
+  <style>
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background: #1a1a1a;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffcc00;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px #000;
+    }
+    .leaderboard {
+      max-width: 600px;
+      margin: auto;
+      background: #2c2c2c;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+    .player {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #333;
+      margin: 8px 0;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .player:first-child { background: #ffcc00; color: #000; font-weight: bold; }
+    .player:nth-child(2) { background: #c0c0c0; color: #000; }
+    .player:nth-child(3) { background: #cd7f32; color: #000; }
+    .badge {
+      font-size: 12px;
+      background: #444;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1>🏆 Ranking GEFIN – Salto Vertical 🏆</h1>
+  <div class="leaderboard" id="ranking"></div>
+
+  <!-- Tabletop.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.4/tabletop.min.js"></script>
+  <script>
+    const sheetID = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pubhtml?gid=0&single=true"; // coloque o ID da sua planilha
+    const publicURL = `https://docs.google.com/spreadsheets/d/${sheetID}/pubhtml`;
+
+    function init() {
+      Tabletop.init({
+        key: publicURL,
+        simpleSheet: true,
+        callback: function(data) {
+          // Ordena pela altura do salto (decrescente)
+          data.sort((a,b) => b["Salto (cm)"] - a["Salto (cm)"]);
+          
+          const rankingDiv = document.getElementById("ranking");
+          data.forEach((row, index) => {
+            const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : (index+1)+"º";
+            const div = document.createElement("div");
+            div.className = "player";
+            div.innerHTML = `
+              <span>${medal} ${row.Nome}</span>
+              <span>${row["Salto (cm)"]} cm</span>
+              <span class="badge">${row.Badge || ""}</span>
+            `;
+            rankingDiv.appendChild(div);
+          });
+        }
+      });
+    }
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
