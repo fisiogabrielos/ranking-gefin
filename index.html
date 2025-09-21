@@ -3,17 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranking GEFIN - HYPERDRIVE!</title>
+  <title>Ranking GEFIN - ARCADE LEGEND!</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
 
     :root {
       --sci-fi-cyan: #00ffff;
       --sci-fi-magenta: #ff00ff;
-      --sci-fi-blue: #0077ff;
       --sci-fi-dark-blue: #020818;
       --sci-fi-yellow: #f7ff00;
-      /* Propriedades para o scanner do mouse */
       --mouse-x: 50vw;
       --mouse-y: 50vh;
     }
@@ -24,34 +22,33 @@
       color: #fff;
       text-align: center;
       padding: 20px 5%;
-      overflow: hidden; /* Esconde o overflow do scanner */
+      overflow: hidden;
       position: relative;
     }
     
-    /* Efeito de Scanner que segue o mouse */
     body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
-                                    rgba(0, 119, 255, 0.2) 0%, 
-                                    transparent 20%, 
-                                    transparent 100%);
-        z-index: 2;
-        pointer-events: none; /* Permite clicar através dele */
-        transition: background 0.1s ease-out;
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
+                                  rgba(0, 119, 255, 0.25) 0%, 
+                                  transparent 25%);
+      z-index: 2;
+      pointer-events: none;
+      transition: transform 0.2s ease-out;
     }
 
-    /* Fundo de estrelas animado */
+    body:active::before {
+        transform: scale(2); /* Efeito de onda ao clicar */
+        opacity: 0;
+    }
+
     .stars {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
       background: #020818 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQflCBgQIRv5Kx2TAAAAe0lEQVRIx2NgGBoAWaAdwAAGZAOALGCiAsoA0gAAVhB8BwD+3yX/X2UMgOqAFLsB/z/D/3+G/+skAP8//2/2/w/ff4a/f5L/b4YBAAFgMv9/hv+/wP8/JP8/I/8//3+G/3+G/5/l/x8A+L8M/z/L/58R/v8f/v8f/v8P//8H/z8DAAAMALs045yLiYpPAAAAAElFTkSuQmCC) repeat;
       z-index: -1;
-      animation: space-travel 15s linear infinite;
+      animation: space-travel 10s linear infinite;
     }
 
     @keyframes space-travel {
@@ -64,38 +61,39 @@
       color: var(--sci-fi-cyan);
       text-shadow: 0 0 5px var(--sci-fi-cyan), 0 0 10px var(--sci-fi-cyan), 0 0 20px var(--sci-fi-magenta);
       font-size: clamp(1.5rem, 5vw, 2.5rem);
-      margin-bottom: 30px;
+      margin-bottom: 10px;
+    }
+    
+    #highscore-text {
+        font-family: 'Press Start 2P', cursive;
+        color: var(--sci-fi-yellow);
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        height: 3rem;
+        text-shadow: 0 0 10px var(--sci-fi-yellow);
+        opacity: 0;
+        transform: scale(1.5);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #highscore-text.visible {
+        opacity: 1;
+        transform: scale(1);
     }
 
-    /* Mensagem de loading */
     #loading-thrusters {
       font-size: clamp(1rem, 4vw, 1.5rem);
       color: var(--sci-fi-yellow);
-      text-shadow: 0 0 5px var(--sci-fi-yellow);
-      margin: 100px 0;
-      min-height: 1.5rem; /* Evita que a página pule */
+      margin: 10px 0 20px 0;
+      min-height: 1.5rem;
     }
     
     table {
       margin: 0 auto;
-      border-collapse: separate;
-      border-spacing: 0;
       width: 100%;
       max-width: 900px;
       background: rgba(10, 25, 47, 0.85);
       border: 2px solid var(--sci-fi-cyan);
       box-shadow: 0 0 15px var(--sci-fi-cyan);
       backdrop-filter: blur(5px);
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      transform: scale(0.95);
-    }
-    
-    table.loaded {
-      visibility: visible;
-      opacity: 1;
-      transform: scale(1);
     }
 
     th, td {
@@ -112,51 +110,48 @@
     
     tbody tr {
         opacity: 0;
-        transform: translateX(-50px);
-        animation: row-fly-in 0.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        animation: row-fade-in 0.5s forwards;
     }
 
-    @keyframes row-fly-in {
-        to { opacity: 1; transform: translateX(0); }
+    @keyframes row-fade-in {
+        to { opacity: 1; }
     }
     
-    tbody tr.flash {
-        animation: row-flash 0.4s ease-out;
+    tbody tr.flash-bang {
+        animation: row-flash-bang 0.4s ease-out;
     }
-    @keyframes row-flash {
-        0%, 100% { background-color: transparent; }
-        50% { background-color: rgba(0, 255, 255, 0.3); }
-    }
-
-    .top1 {
-      font-size: 1.2rem;
-      font-weight: bold;
-      animation: top1-pulse 2s infinite;
-      border-top: 2px solid var(--sci-fi-yellow);
-      border-bottom: 2px solid var(--sci-fi-yellow) !important;
+    @keyframes row-flash-bang {
+        0% { transform: scale(1); }
+        50% { background-color: rgba(0, 255, 255, 0.4); transform: scale(1.05); }
+        100% { transform: scale(1); }
     }
 
+    .top1 { font-weight: bold; animation: top1-pulse 2s infinite; border: 2px solid var(--sci-fi-yellow) !important; }
     @keyframes top1-pulse {
       0%, 100% { background-color: rgba(247, 255, 0, 0.1); box-shadow: 0 0 15px 5px rgba(247, 255, 0, 0.2); }
       50% { background-color: rgba(247, 255, 0, 0.2); box-shadow: 0 0 25px 10px rgba(247, 255, 0, 0.4); }
     }
+    .top2 { font-weight: bold; background: rgba(192, 192, 192, 0.2); }
+    .top3 { font-weight: bold; background: rgba(205, 127, 50, 0.2); }
 
     .medal { font-size: 1.5rem; display: inline-block; }
 
-    /* Cometa animado */
-    #comet {
+    /* Invasores Espaciais */
+    .invader {
         position: fixed;
-        font-size: 2.5rem;
-        bottom: 50%;
-        left: -100px;
-        animation: comet-fly 25s linear infinite;
-        animation-delay: 3s;
-        z-index: 10;
-        text-shadow: 0 0 10px #fff, 0 0 20px var(--sci-fi-cyan), 0 0 40px var(--sci-fi-cyan);
+        font-size: 2rem;
+        top: -50px;
+        animation: invader-fall 10s linear infinite;
+        z-index: 1;
     }
-    @keyframes comet-fly {
-        0% { transform: translateX(0) rotate(15deg); }
-        100% { transform: translateX(120vw) rotate(15deg); }
+    @keyframes invader-fall {
+        to { transform: translateY(110vh); }
+    }
+
+    #particles-canvas {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none; z-index: 999;
     }
 
     @media (max-width: 768px) {
@@ -166,24 +161,22 @@
       td { padding-left: 50%; position: relative; text-align: right; border-bottom: 1px solid rgba(0, 255, 255, 0.1); }
       td:last-child { border-bottom: none; }
       td::before {
-        content: attr(data-label);
-        position: absolute; left: 10px; width: 45%;
-        padding-right: 10px; white-space: nowrap;
-        text-align: left; font-weight: bold;
-        color: var(--sci-fi-yellow);
+        content: attr(data-label); position: absolute; left: 10px;
+        width: 45%; padding-right: 10px; white-space: nowrap;
+        text-align: left; font-weight: bold; color: var(--sci-fi-yellow);
       }
     }
   </style>
 </head>
 <body>
   <div class="stars"></div>
-  <div id="comet">☄️</div>
+  <canvas id="particles-canvas"></canvas>
 
-  <h1 data-text="🏆 Ranking GEFIN - Salto contramovimento 🌌"></h1>
-  
+  <h1 data-text="🏆 Ranking Cósmico GEFIN 🌌"></h1>
   <p id="loading-thrusters"></p>
+  <div id="highscore-text"></div>
   
-  <table id="ranking">
+  <table id="ranking" style="visibility: hidden; opacity: 0;">
     <thead>
       <tr>
         <th>Posição</th>
@@ -195,134 +188,191 @@
   </table>
   
   <audio id="boot-sound" src="https://actions.google.com/sounds/v1/science_fiction/electronic_boot_up.ogg" preload="auto"></audio>
-  <audio id="row-sound" src="https://actions.google.com/sounds/v1/science_fiction/laser_flyby.ogg" preload="auto"></audio>
+  <audio id="row-sound" src="https://actions.google.com/sounds/v1/science_fiction/laser_flyby_short.ogg" preload="auto"></audio>
   <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/science_fiction/power_up_2.ogg" preload="auto"></audio>
   <audio id="click-sound" src="https://actions.google.com/sounds/v1/science_fiction/futuristic_blip_short.ogg" preload="auto"></audio>
+  <audio id="podium-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm.ogg" preload="auto"></audio>
+  <audio id="winner-sound" src="https://actions.google.com/sounds/v1/impacts/explosion_with_shatter.ogg" preload="auto"></audio>
+
 
   <script>
-    // --- EFEITO DE SCANNER DO MOUSE ---
-    window.addEventListener('mousemove', e => {
-      document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
-      document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
-    });
-
-    // --- FUNÇÃO PARA ANIMAÇÃO DE TEXTO (BOOT SEQUENCE) ---
-    function typeScramble(element, text, onComplete) {
+    // --- EFEITOS VISUAIS ---
+    window.addEventListener('mousemove', e => document.body.style.setProperty('--mouse-x', `${e.clientX}px`) && document.body.style.setProperty('--mouse-y', `${e.clientY}px`));
+    
+    function typeText(element, text, onComplete) {
         let i = 0;
-        const chars = '!<>-_\\/[]{}—=+*^?#________';
+        element.textContent = "";
         const interval = setInterval(() => {
-            element.textContent = text.substring(0, i) + 
-                                  Array.from({length: text.length - i}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+            element.textContent += text[i];
             i++;
-            if (i > text.length) {
+            if (i >= text.length) {
                 clearInterval(interval);
-                element.textContent = text;
                 if (onComplete) onComplete();
             }
-        }, 50);
+        }, 75);
     }
     
-    // --- FUNÇÃO PARA ANIMAÇÃO DE CONTAGEM DE NÚMEROS ---
     function animateCountUp(element, finalValue) {
-        let start = 0;
-        const duration = 750; // 0.75 segundos
-        const stepTime = Math.abs(Math.floor(duration / finalValue));
+        let current = 0;
+        const step = Math.max(1, Math.floor(finalValue / 30));
         const timer = setInterval(() => {
-            start += 1;
-            element.textContent = start;
-            if (start === finalValue) {
+            current += step;
+            if (current >= finalValue) {
+                element.textContent = finalValue;
                 clearInterval(timer);
+            } else {
+                element.textContent = current;
             }
-        }, stepTime);
+        }, 25);
+    }
+    
+    // --- PARTÍCULAS PARA O VENCEDOR ---
+    const particlesCanvas = document.getElementById('particles-canvas');
+    const particlesCtx = particlesCanvas.getContext('2d');
+    let particles = [];
+    function triggerParticles(x, y) {
+        particlesCanvas.width = window.innerWidth;
+        particlesCanvas.height = window.innerHeight;
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x, y,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8,
+                size: Math.random() * 5 + 2,
+                color: ['#00ffff', '#ff00ff', '#f7ff00', '#ffffff'][Math.floor(Math.random() * 4)],
+                life: 60
+            });
+        }
+    }
+    function animateParticles() {
+        particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+        particles = particles.filter(p => p.life > 0);
+        particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.1; // Gravidade
+            p.life--;
+            particlesCtx.fillStyle = p.color;
+            particlesCtx.globalAlpha = p.life / 60;
+            particlesCtx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        particlesCtx.globalAlpha = 1;
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // --- INVASORES ESPACIAIS ---
+    const invaders = ['👾', '🛸', '👽'];
+    for(let i = 0; i < 5; i++) {
+        const invader = document.createElement('div');
+        invader.className = 'invader';
+        invader.textContent = invaders[i % invaders.length];
+        invader.style.left = `${Math.random() * 100}vw`;
+        invader.style.animationDuration = `${Math.random() * 5 + 8}s`;
+        invader.style.animationDelay = `${Math.random() * 10}s`;
+        document.body.appendChild(invader);
     }
 
+    // --- LÓGICA PRINCIPAL DO RANKING ---
     const publicSpreadsheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
     async function loadRankingData() {
-      const h1 = document.querySelector('h1');
-      const loadingText = document.getElementById('loading-thrusters');
-      document.getElementById('boot-sound').play().catch(e => {});
-
-      typeScramble(h1, h1.getAttribute('data-text'), () => {
-          typeScramble(loadingText, "CALIBRANDO PROPULSORES...");
-      });
-      
-      await new Promise(r => setTimeout(r, 2000));
-
-      try {
-        const response = await fetch(publicSpreadsheetUrl);
-        const csvText = await response.text();
-        const data = parseCSV(csvText);
+        const h1 = document.querySelector('h1');
+        const loadingText = document.getElementById('loading-thrusters');
+        document.getElementById('boot-sound').play().catch(e => {});
+        typeText(h1, h1.getAttribute('data-text'), () => typeText(loadingText, "RECEBENDO TRANSMISSÃO..."));
         
-        loadingText.style.transition = 'opacity 0.5s';
-        loadingText.style.opacity = '0';
-        
-        await new Promise(r => setTimeout(r, 500));
-        document.getElementById('ranking').classList.add('loaded');
-        await showInfo(data);
-
-      } catch (error) {
-        console.error("Falha:", error);
-        typeScramble(loadingText, "ERRO DE TELEMETRIA");
-      }
+        try {
+            const response = await fetch(publicSpreadsheetUrl);
+            const csvText = await response.text();
+            const data = parseCSV(csvText);
+            
+            await new Promise(r => setTimeout(r, 1500));
+            loadingText.style.transition = 'opacity 0.5s';
+            loadingText.style.opacity = '0';
+            
+            await new Promise(r => setTimeout(r, 500));
+            document.getElementById('ranking').style.visibility = 'visible';
+            document.getElementById('ranking').style.opacity = '1';
+            await showInfo(data);
+        } catch (error) {
+            console.error("Falha:", error);
+            typeText(loadingText, "SINAL PERDIDO");
+        }
     }
 
     function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      if (lines.length < 2) return [];
-      const headers = lines[0].split(',').map(header => header.trim());
-      return lines.slice(1).map(line => {
-        const values = line.split(',').map(value => value.trim());
-        let entry = {};
-        headers.forEach((header, index) => { entry[header] = values[index] || ''; });
-        return entry;
-      });
+        const lines = text.trim().split('\n').slice(1); // Ignora cabeçalho
+        return lines.map(line => {
+            const values = line.split(',');
+            return { Nomes: values[0]?.trim() || 'N/A', 'Altura máxima (cm)': values[1]?.trim() || '0' };
+        });
     }
     
     async function showInfo(data) {
-      data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
-      const tbody = document.querySelector("#ranking tbody");
-      tbody.innerHTML = "";
+        data.sort((a, b) => parseFloat(a["Altura máxima (cm)"]) - parseFloat(b["Altura máxima (cm)"])); // Ordena do menor para o maior
+        const tbody = document.querySelector("#ranking tbody");
+        const podium = data.slice(-3).reverse(); // Pega os 3 melhores e inverte (1º, 2º, 3º)
+        const others = data.slice(0, -3);
 
-      for (const [index, item] of data.entries()) {
-        await new Promise(r => setTimeout(r, 150));
-        const rowSound = document.getElementById("row-sound");
-        rowSound.currentTime = 0;
-        rowSound.play().catch(e => {});
-
-        const row = document.createElement("tr");
-        row.style.animationDelay = `${index * 0.1}s`;
-
-        let medal = "";
-        if(index === 0) { 
-          row.classList.add("top1"); 
-          medal = "🪐"; 
-          document.getElementById("powerup-sound").play().catch(e => {});
+        // Mostra todos os outros primeiro
+        for (const [index, item] of others.entries()) {
+            await new Promise(r => setTimeout(r, 100));
+            createRow(item, data.length - index - 3, tbody);
         }
-        else if(index === 1) { medal = "🚀"; }
-        else if(index === 2) { medal = "⭐"; }
         
+        // Pausa dramática para o pódio
+        await new Promise(r => setTimeout(r, 1500));
+        
+        // Revela o Pódio
+        const highscoreText = document.getElementById('highscore-text');
+        for (const [index, item] of podium.entries()) {
+            await new Promise(r => setTimeout(r, 1000));
+            typeText(highscoreText, `REVELANDO TOP ${3 - index}...`);
+            document.getElementById('podium-sound').play().catch(e=>{});
+            await new Promise(r => setTimeout(r, 1500));
+            const row = createRow(item, 3 - index, tbody, true);
+            
+            if (index === 2) { // É o 1º lugar!
+                await new Promise(r => setTimeout(r, 500));
+                document.getElementById('winner-sound').play().catch(e=>{});
+                const rect = row.getBoundingClientRect();
+                triggerParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                typeText(highscoreText, "NEW HIGH SCORE!");
+                highscoreText.classList.add('visible');
+            }
+        }
+    }
+    
+    function createRow(item, rank, tbody, isPodium = false) {
+        const row = document.createElement("tr");
+        let medal = "";
+        let rankClass = "";
+        
+        if (rank === 1) { rankClass = "top1"; medal = "🏆"; }
+        else if (rank === 2) { rankClass = "top2"; medal = "🚀"; }
+        else if (rank === 3) { rankClass = "top3"; medal = "⭐"; }
+        if(rankClass) row.classList.add(rankClass);
+
         const score = parseInt(item["Altura máxima (cm)"], 10) || 0;
         row.innerHTML = `
-          <td data-label="Posição">${index + 1}º <span class="medal">${medal}</span></td>
-          <td data-label="Cadete">${item.Nomes}</td> 
-          <td data-label="Salto (m)" class="score-cell">${0}</td>
+            <td data-label="Posição">${rank}º <span class="medal">${medal}</span></td>
+            <td data-label="Cadete">${item.Nomes}</td> 
+            <td data-label="Salto (m)" class="score-cell">${isPodium ? 0 : score}</td>
         `;
-        tbody.appendChild(row);
-
-        // Inicia a contagem do placar
-        const scoreCell = row.querySelector('.score-cell');
-        animateCountUp(scoreCell, score);
+        tbody.prepend(row); // Adiciona no topo da tabela
         
-        // Adiciona interatividade de clique
+        if (isPodium) {
+            animateCountUp(row.querySelector('.score-cell'), score);
+        }
+        
         row.addEventListener('click', () => {
-            row.classList.remove('flash'); // Reseta a animação se já estiver lá
-            void row.offsetWidth; // Truque para reiniciar a animação CSS
-            row.classList.add('flash');
+            row.classList.remove('flash-bang');
+            void row.offsetWidth;
+            row.classList.add('flash-bang');
             document.getElementById('click-sound').play().catch(e => {});
-            row.addEventListener('animationend', () => row.classList.remove('flash'), { once: true });
         });
-      }
+        return row;
     }
     
     window.addEventListener("DOMContentLoaded", loadRankingData);
