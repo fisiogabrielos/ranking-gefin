@@ -39,14 +39,14 @@
     }
 
     body:active::before {
-        transform: scale(2); /* Efeito de onda ao clicar */
+        transform: scale(2);
         opacity: 0;
     }
 
     .stars {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: #020818 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQflCBgQIRv5Kx2TAAAAe0lEQVRIx2NgGBoAWaAdwAAGZAOALGCiAsoA0gAAVhB8BwD+3yX/X2UMgOqAFLsB/z/D/3+G/+skAP8//2/2/w/ff4a/f5L/b4YBAAFgMv9/hv+/wP8/JP8/I/8//3+G/3+G/5/l/x8A+L8M/z/L/58R/v8f/v8f/v8P//8H/z8DAAAMALs045yLiYpPAAAAAElFTkSuQmCC) repeat;
+      background: #020818 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQflCBgQIRv5Kx2TAAAAe0lEQVRIx2NgGBoAWaAdwAAGZAOALGCiAsoA0gAAVhB8BwD+3yX/X2UMgOqAFLsB/z/D/3+G/+skAP8//2/2/w/ff4a/f5L/b4YBAAFgMv9/hv+/wP8/JP8/I/8//3+G/3+G/5/l/x8A+L8M/z/L/58R/v8f/v8f/v8P//8H/z8DAAAMALs045yLiYpPAAAAAElFTSuQmCC) repeat;
       z-index: -1;
       animation: space-travel 10s linear infinite;
     }
@@ -203,9 +203,10 @@
         let i = 0;
         element.textContent = "";
         const interval = setInterval(() => {
-            element.textContent += text[i];
-            i++;
-            if (i >= text.length) {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+            } else {
                 clearInterval(interval);
                 if (onComplete) onComplete();
             }
@@ -226,7 +227,6 @@
         }, 25);
     }
     
-    // --- PARTÍCULAS PARA O VENCEDOR ---
     const particlesCanvas = document.getElementById('particles-canvas');
     const particlesCtx = particlesCanvas.getContext('2d');
     let particles = [];
@@ -248,10 +248,8 @@
         particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
         particles = particles.filter(p => p.life > 0);
         particles.forEach(p => {
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.1; // Gravidade
-            p.life--;
+            p.x += p.vx; p.y += p.vy;
+            p.vy += 0.1; p.life--;
             particlesCtx.fillStyle = p.color;
             particlesCtx.globalAlpha = p.life / 60;
             particlesCtx.fillRect(p.x, p.y, p.size, p.size);
@@ -261,7 +259,6 @@
     }
     animateParticles();
 
-    // --- INVASORES ESPACIAIS ---
     const invaders = ['👾', '🛸', '👽'];
     for(let i = 0; i < 5; i++) {
         const invader = document.createElement('div');
@@ -273,7 +270,6 @@
         document.body.appendChild(invader);
     }
 
-    // --- LÓGICA PRINCIPAL DO RANKING ---
     const publicSpreadsheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
     async function loadRankingData() {
@@ -302,49 +298,65 @@
     }
 
     function parseCSV(text) {
-        const lines = text.trim().split('\n').slice(1); // Ignora cabeçalho
-        return lines.map(line => {
+        const lines = text.trim().split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
+        const dataLines = lines.slice(1);
+        return dataLines.map(line => {
             const values = line.split(',');
-            return { Nomes: values[0]?.trim() || 'N/A', 'Altura máxima (cm)': values[1]?.trim() || '0' };
-        });
+            let entry = {};
+            headers.forEach((header, index) => {
+                entry[header] = values[index]?.trim() || '';
+            });
+            return entry;
+        }).filter(item => item.Nomes && item["Altura máxima (cm)"]); // Filtra linhas vazias
     }
     
+    // ================================================================
+    // FUNÇÃO SHOWINFO TOTALMENTE REESCRITA PARA CORRIGIR A ORDENAÇÃO
+    // ================================================================
     async function showInfo(data) {
-        data.sort((a, b) => parseFloat(a["Altura máxima (cm)"]) - parseFloat(b["Altura máxima (cm)"])); // Ordena do menor para o maior
+        // 1. ORDENAÇÃO CORRETA: Do maior para o menor.
+        data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
+        
         const tbody = document.querySelector("#ranking tbody");
-        const podium = data.slice(-3).reverse(); // Pega os 3 melhores e inverte (1º, 2º, 3º)
-        const others = data.slice(0, -3);
+        tbody.innerHTML = "";
 
-        // Mostra todos os outros primeiro
-        for (const [index, item] of others.entries()) {
-            await new Promise(r => setTimeout(r, 100));
-            createRow(item, data.length - index - 3, tbody);
-        }
-        
-        // Pausa dramática para o pódio
-        await new Promise(r => setTimeout(r, 1500));
-        
-        // Revela o Pódio
-        const highscoreText = document.getElementById('highscore-text');
-        for (const [index, item] of podium.entries()) {
-            await new Promise(r => setTimeout(r, 1000));
-            typeText(highscoreText, `REVELANDO TOP ${3 - index}...`);
-            document.getElementById('podium-sound').play().catch(e=>{});
-            await new Promise(r => setTimeout(r, 1500));
-            const row = createRow(item, 3 - index, tbody, true);
+        // Mostra todas as posições, uma a uma, começando pelas mais baixas
+        for (let i = 0; i < data.length; i++) {
+            // A posição real é o índice + 1
+            const rank = i + 1;
+            const item = data[i];
+
+            // Adiciona pausa e efeitos especiais para o pódio
+            if(rank <= 3) {
+                await new Promise(r => setTimeout(r, 1500));
+                const highscoreText = document.getElementById('highscore-text');
+                highscoreText.textContent = ''; // Limpa antes de digitar
+                typeText(highscoreText, `REVELANDO TOP ${rank}...`);
+                document.getElementById('podium-sound').play().catch(e=>{});
+                await new Promise(r => setTimeout(r, 1500));
+            } else {
+                await new Promise(r => setTimeout(r, 150));
+            }
             
-            if (index === 2) { // É o 1º lugar!
+            const row = createRow(item, rank, tbody);
+
+            // Efeitos especiais para o 1º lugar
+            if (rank === 1) {
                 await new Promise(r => setTimeout(r, 500));
                 document.getElementById('winner-sound').play().catch(e=>{});
                 const rect = row.getBoundingClientRect();
                 triggerParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                
+                const highscoreText = document.getElementById('highscore-text');
+                highscoreText.textContent = '';
                 typeText(highscoreText, "NEW HIGH SCORE!");
                 highscoreText.classList.add('visible');
             }
         }
     }
     
-    function createRow(item, rank, tbody, isPodium = false) {
+    function createRow(item, rank, tbody) {
         const row = document.createElement("tr");
         let medal = "";
         let rankClass = "";
@@ -358,13 +370,11 @@
         row.innerHTML = `
             <td data-label="Posição">${rank}º <span class="medal">${medal}</span></td>
             <td data-label="Cadete">${item.Nomes}</td> 
-            <td data-label="Salto (m)" class="score-cell">${isPodium ? 0 : score}</td>
+            <td data-label="Salto (m)" class="score-cell">0</td>
         `;
-        tbody.prepend(row); // Adiciona no topo da tabela
+        tbody.appendChild(row);
         
-        if (isPodium) {
-            animateCountUp(row.querySelector('.score-cell'), score);
-        }
+        animateCountUp(row.querySelector('.score-cell'), score);
         
         row.addEventListener('click', () => {
             row.classList.remove('flash-bang');
