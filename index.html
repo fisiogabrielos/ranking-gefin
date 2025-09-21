@@ -38,8 +38,25 @@
         width: 400px; height: 400px;
         background: radial-gradient(circle, var(--glow-yellow), transparent 60%);
         border-radius: 50%;
-        box-shadow: 0 0 100px var(--glow-yellow);
+        animation: pulse-sun 8s infinite ease-in-out;
     }
+    @keyframes pulse-sun {
+        0%, 100% { box-shadow: 0 0 100px var(--glow-yellow); }
+        50% { box-shadow: 0 0 150px #fff; }
+    }
+
+    .mountains {
+        position: absolute;
+        bottom: 0; left: -50%;
+        width: 200%; height: 50%;
+        animation: scroll-mountains 40s linear infinite;
+    }
+
+    @keyframes scroll-mountains {
+        from { transform: translateX(0%); }
+        to { transform: translateX(25%); }
+    }
+
     .grid {
         position: absolute;
         width: 200%; height: 100%;
@@ -56,6 +73,26 @@
         to { background-position: 0 80px; }
     }
 
+    .shooting-star {
+        position: fixed;
+        top: -10%;
+        width: 2px;
+        height: 150px;
+        background: linear-gradient(to bottom, #fff, transparent);
+        opacity: 0;
+        animation: shoot 5s linear infinite;
+    }
+    .shooting-star:nth-child(1) { left: 20%; animation-delay: 3s; }
+    .shooting-star:nth-child(2) { left: 50%; animation-delay: 7s; animation-duration: 4s; }
+    .shooting-star:nth-child(3) { left: 80%; animation-delay: 1s; animation-duration: 6s; }
+
+    @keyframes shoot {
+        0% { transform: translateY(0) rotate(-45deg); opacity: 0; }
+        20% { opacity: 1; }
+        100% { transform: translateY(120vh) rotate(-45deg); opacity: 0; }
+    }
+
+
     h1 {
       font-family: 'Press Start 2P', cursive;
       color: #fff;
@@ -66,6 +103,8 @@
         0 0 40px var(--glow-cyan);
       font-size: clamp(1.5rem, 5vw, 2.5rem);
       margin-bottom: 30px;
+      position: relative; /* Garante que o título fique sobre o fundo */
+      z-index: 5;
     }
 
     #loading-message {
@@ -73,6 +112,8 @@
       color: var(--glow-yellow);
       text-shadow: 0 0 5px var(--glow-yellow);
       min-height: 1.5rem;
+      position: relative;
+      z-index: 5;
     }
     
     table {
@@ -86,6 +127,8 @@
       backdrop-filter: blur(4px);
       visibility: hidden; opacity: 0;
       transition: opacity 0.5s ease;
+      position: relative;
+      z-index: 5;
     }
     table.loaded { visibility: visible; opacity: 1; }
 
@@ -105,7 +148,6 @@
     
     tbody tr {
       opacity: 0;
-      /* Animação de Salto! */
       animation: jump-in 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     @keyframes jump-in {
@@ -145,7 +187,13 @@
 <body>
   <div class="background-container">
       <div class="sun"></div>
+      <svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#261447" fill-opacity="1" d="M0,192L48,176C96,160,192,128,288,133.3C384,139,480,181,576,186.7C672,192,768,160,864,138.7C960,117,1056,107,1152,122.7C1248,139,1344,181,1392,202.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+      </svg>
       <div class="grid"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
   </div>
 
   <h1>Ranking GEFIN - Salto Vertical</h1>
@@ -203,25 +251,30 @@
     
     function animateCountUp(element, finalValue) {
         let current = 0;
-        const duration = 1000; // 1 segundo
+        const duration = 1000;
         const increment = finalValue / (duration / 16);
         const timer = setInterval(() => {
             current += increment;
             if (current >= finalValue) {
-                element.textContent = finalValue;
+                element.textContent = finalValue.toFixed(1).replace('.', ',');
                 clearInterval(timer);
             } else {
-                element.textContent = Math.ceil(current);
+                element.textContent = (current.toFixed(1)).replace('.', ',');
             }
         }, 16);
     }
 
     async function showInfo(data) {
-      data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
+      data.sort((a, b) => {
+          const valA = parseFloat(String(a["Altura máxima (cm)"]).replace(',', '.')) || 0;
+          const valB = parseFloat(String(b["Altura máxima (cm)"]).replace(',', '.')) || 0;
+          return valB - valA;
+      });
+      
       const tbody = document.querySelector("#ranking tbody");
 
       for (const [index, item] of data.entries()) {
-        await new Promise(r => setTimeout(r, 150)); // Delay para cada salto
+        await new Promise(r => setTimeout(r, 150));
         
         const row = document.createElement("tr");
         row.style.animationDelay = `${index * 0.05}s`;
@@ -235,11 +288,11 @@
         else if(index === 1) { row.classList.add("top2"); medal = "🥈"; }
         else if(index === 2) { row.classList.add("top3"); medal = "🥉"; }
         
-        const score = parseInt(item["Altura máxima (cm)"], 10) || 0;
+        const score = parseFloat(String(item["Altura máxima (cm)"]).replace(',', '.')) || 0;
         row.innerHTML = `
           <td data-label="Posição">${index + 1}º <span class="medal">${medal}</span></td>
           <td data-label="Atleta">${item.Nomes}</td> 
-          <td data-label="Altura (cm)" class="score-cell">0</td>
+          <td data-label="Altura (cm)" class="score-cell">0,0</td>
         `;
         tbody.appendChild(row);
 
