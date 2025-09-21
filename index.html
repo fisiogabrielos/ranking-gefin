@@ -2,390 +2,310 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranking GEFIN - ARCADE LEGEND!</title>
+  <title>Ranking GEFIN - Salto Vertical (Minecraft Edition)</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
+    /* Importa fonte pixelizada */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
     :root {
-      --sci-fi-cyan: #00ffff;
-      --sci-fi-magenta: #ff00ff;
-      --sci-fi-dark-blue: #020818;
-      --sci-fi-yellow: #f7ff00;
-      --mouse-x: 50vw;
-      --mouse-y: 50vh;
+      --minecraft-grass: #558b2f;
+      --minecraft-dirt: #795548;
+      --minecraft-wood: #8d6e63;
+      --minecraft-stone: #757575;
+      --minecraft-gold: #ffeb3b;
+      --minecraft-diamond: #00bcd4;
+      --minecraft-lava: #ff5722;
+      --minecraft-water: #2196f3;
+      --text-color: #eee;
     }
 
     body {
-      font-family: 'Orbitron', sans-serif;
-      background-color: var(--sci-fi-dark-blue);
-      color: #fff;
+      font-family: 'VT323', monospace; /* Fonte mais "Minecraft" */
+      background-color: #78a7c2; /* Cor base do céu */
+      /* IMAGENS EMBUTIDAS DIRETAMENTE AQUI */
+      background-image: 
+        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg=='), /* Céu pixelizado */
+        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFRSURBVHhe7dJBEsQwCAPBCfk/d7cIIZpA2Lq7W1AChAAAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCED+5gE23EYkU6l0mAAAAABJRU5ErkJggg=='); /* Chão de blocos */
+      background-repeat: repeat-x, repeat-x;
+      background-position: top 20px, bottom;
+      background-size: auto, 100% 150px;
+      color: var(--text-color);
       text-align: center;
-      padding: 20px 5%;
-      overflow: hidden;
+      padding: 20px;
+      overflow-x: hidden;
       position: relative;
     }
-    
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
-                                  rgba(0, 119, 255, 0.25) 0%, 
-                                  transparent 25%);
-      z-index: 2;
-      pointer-events: none;
-      transition: transform 0.2s ease-out;
+
+    /* Efeito de pixelização leve em todo o conteúdo */
+    .pixelated-content > * {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
     }
 
-    body:active::before {
-        transform: scale(2);
-        opacity: 0;
-    }
-
-    .stars {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: #020818 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQflCBgQIRv5Kx2TAAAAe0lEQVRIx2NgGBoAWaAdwAAGZAOALGCiAsoA0gAAVhB8BwD+3yX/X2UMgOqAFLsB/z/D/3+G/+skAP8//2/2/w/ff4a/f5L/b4YBAAFgMv9/hv+/wP8/JP8/I/8//3+G/3+G/5/l/x8A+L8M/z/L/58R/v8f/v8f/v8P//8H/z8DAAAMALs045yLiYpPAAAAAElFTSuQmCC) repeat;
-      z-index: -1;
-      animation: space-travel 10s linear infinite;
-    }
-
-    @keyframes space-travel {
-        from { background-position: 0 0; }
-        to { background-position: 256px 256px; }
-    }
-    
     h1 {
-      font-family: 'Press Start 2P', cursive;
-      color: var(--sci-fi-cyan);
-      text-shadow: 0 0 5px var(--sci-fi-cyan), 0 0 10px var(--sci-fi-cyan), 0 0 20px var(--sci-fi-magenta);
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      margin-bottom: 10px;
-    }
-    
-    #highscore-text {
-        font-family: 'Press Start 2P', cursive;
-        color: var(--sci-fi-yellow);
-        font-size: clamp(1.8rem, 6vw, 3rem);
-        height: 3rem;
-        text-shadow: 0 0 10px var(--sci-fi-yellow);
-        opacity: 0;
-        transform: scale(1.5);
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    #highscore-text.visible {
-        opacity: 1;
-        transform: scale(1);
+      font-family: 'Press Start 2P', cursive; /* Título mais impactante */
+      color: var(--minecraft-gold);
+      text-shadow: 2px 2px #000, 4px 4px var(--minecraft-dirt);
+      margin-bottom: 30px;
+      font-size: 32px;
+      animation: block-bounce 1s infinite alternate; /* Animação de bloco pulando */
+      padding: 10px 20px;
+      border: 4px solid var(--minecraft-stone);
+      background-color: var(--minecraft-wood);
+      display: inline-block;
+      box-shadow: 6px 6px 0px 0px #000;
     }
 
-    #loading-thrusters {
-      font-size: clamp(1rem, 4vw, 1.5rem);
-      color: var(--sci-fi-yellow);
-      margin: 10px 0 20px 0;
-      min-height: 1.5rem;
+    @keyframes block-bounce {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-10px); }
+    }
+
+    /* Mensagem de Carregamento */
+    #loading-chunks {
+      font-size: 24px;
+      color: var(--minecraft-water);
+      text-shadow: 2px 2px #000;
+      margin-bottom: 30px;
+      animation: blink-minecraft 1.2s infinite steps(1); /* Pisca em pixels */
+    }
+    
+    @keyframes blink-minecraft {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
     
     table {
-      margin: 0 auto;
-      width: 100%;
-      max-width: 900px;
-      background: rgba(10, 25, 47, 0.85);
-      border: 2px solid var(--sci-fi-cyan);
-      box-shadow: 0 0 15px var(--sci-fi-cyan);
-      backdrop-filter: blur(5px);
+      margin: 40px auto;
+      border-collapse: collapse;
+      width: 80%;
+      background: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente escuro */
+      border: 5px solid var(--minecraft-stone);
+      box-shadow: 8px 8px 0px 0px #000;
+      visibility: hidden; /* Começa escondida */
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    
+    table.loaded {
+      visibility: visible;
+      opacity: 1;
     }
 
     th, td {
       padding: 15px;
-      text-align: center;
-      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+      border: 2px solid var(--minecraft-stone);
+      font-size: 18px;
+      text-shadow: 1px 1px #000;
     }
-    
+
     th {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.8rem;
-      color: var(--sci-fi-yellow);
+      background: var(--minecraft-dirt);
+      color: var(--minecraft-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    
+
     tbody tr {
-        opacity: 0;
-        animation: row-fade-in 0.5s forwards;
+      transition: background-color 0.2s, color 0.2s, transform 0.1s ease-out;
     }
 
-    @keyframes row-fade-in {
-        to { opacity: 1; }
+    tbody tr:nth-child(even) { background: rgba(20, 20, 20, 0.7); }
+    tbody tr:nth-child(odd) { background: rgba(30, 30, 30, 0.7); }
+
+    tbody tr:hover {
+      background-color: var(--minecraft-grass);
+      color: #fff;
+      transform: scale(1.01); /* Leve zoom ao passar o mouse */
+      cursor: pointer;
+    }
+
+    .top1 {
+      background: var(--minecraft-gold) !important;
+      color: #000;
+      font-size: 20px;
+      font-weight: bold;
+      animation: top1-shimmer 2s infinite alternate; /* Brilho de ouro */
+      border: 3px solid var(--minecraft-diamond); /* Borda de diamante */
+      box-shadow: 0 0 15px var(--minecraft-gold), 0 0 25px var(--minecraft-diamond);
+    }
+
+    @keyframes top1-shimmer {
+      from { background-color: var(--minecraft-gold); }
+      to { background-color: #ffda4a; }
+    }
+
+    .top2 { 
+      background: var(--minecraft-stone) !important; 
+      color: #fff; 
+      font-size: 19px; 
+      font-weight: bold; 
+      border: 3px solid var(--minecraft-stone);
+    }
+    .top3 { 
+      background: var(--minecraft-dirt) !important; 
+      color: #fff; 
+      font-size: 18px; 
+      font-weight: bold; 
+      border: 3px solid var(--minecraft-dirt);
+    }
+
+    .medal {
+      font-size: 28px; /* Medalhas maiores */
+      animation: medal-craft-pulse 1s infinite alternate;
+      display: inline-block;
+      text-shadow: 2px 2px #000;
+    }
+
+    @keyframes medal-craft-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); color: var(--minecraft-lava); }
     }
     
-    tbody tr.flash-bang {
-        animation: row-flash-bang 0.4s ease-out;
-    }
-    @keyframes row-flash-bang {
-        0% { transform: scale(1); }
-        50% { background-color: rgba(0, 255, 255, 0.4); transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    .top1 { font-weight: bold; animation: top1-pulse 2s infinite; border: 2px solid var(--sci-fi-yellow) !important; }
-    @keyframes top1-pulse {
-      0%, 100% { background-color: rgba(247, 255, 0, 0.1); box-shadow: 0 0 15px 5px rgba(247, 255, 0, 0.2); }
-      50% { background-color: rgba(247, 255, 0, 0.2); box-shadow: 0 0 25px 10px rgba(247, 255, 0, 0.4); }
-    }
-    .top2 { font-weight: bold; background: rgba(192, 192, 192, 0.2); }
-    .top3 { font-weight: bold; background: rgba(205, 127, 50, 0.2); }
-
-    .medal { font-size: 1.5rem; display: inline-block; }
-
-    /* Invasores Espaciais */
-    .invader {
+    /* Personagem 8-bit */
+    #hero {
+        width: 48px;
+        height: 64px;
+        /* IMAGEM DO PERSONAGEM EMBUTIDA */
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAAD0eI4jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVHhe7dJNKwRRFAbg/+9+lwghIgmFkGhIKGkhIWRDIbFQyAb5A1JISCFRyEJCkjdIssF/yGYjP4qEbEOh5e7s6p7pGvA5s3tmt2f/zJk5s3t3d3eP5/f7L/N8Ph8LAIA/4/P5fPz+AQAAvs7n8/ECAAB/yufz8QIAAABAAAAAAAAAAAAAAAAAAAAAAAAA/yK63ySAcuuLKCwzPst3dEA5Y1WpTtViT8ICb2Z4l+8eQDEKDeVWeYhX5GZ4lu8eQI0sN5Vr5CYg8xOW4Vu+ewB1srJSrRbyEpSZgV+9+e4BFCvLhXwtp/wEpcxQz/I9AChWlgO5hTwhLwEBM8zzPQEoVpYKuVZOPIFfBpgYnucbgLJSrRZyjJzkE/gqQJTB8z0BKKuLhXwhL/EJTDDM8z0BKCvdQp4QH/EEZpjlex9QrCwX8kO8xCdQxPB9D6BY6S7kC/EJnGB4vucBxUq/kAfEJzABDM/3PKBYKZdyjfgEJiDm+Z4HVCvLhXwhLuITWJjh+Z4HVCvlQu4Ql/gENsxwPAQAyq1cKxdxj7jEJfAQAChXloP4jbjEJ/ADAEBllQt5Q1ziEpSA+R4AFCvdQ1ziEpSA+R4AFCvdQ1ziEpSA+R4AFL1/AH5L6BHF2bcoAAAAAElFTkSuQmCC') 0 0;
         position: fixed;
-        font-size: 2rem;
-        top: -50px;
-        animation: invader-fall 10s linear infinite;
-        z-index: 1;
-    }
-    @keyframes invader-fall {
-        to { transform: translateY(110vh); }
+        bottom: 85px;
+        left: 0;
+        animation: hero-run 0.5s steps(4) infinite, hero-move 15s linear infinite;
+        z-index: 100;
+        image-rendering: pixelated; /* Garante que o personagem fique pixelado */
     }
 
-    #particles-canvas {
-        position: fixed; top: 0; left: 0;
-        width: 100%; height: 100%;
-        pointer-events: none; z-index: 999;
+    @keyframes hero-run {
+        from { background-position: 0 0; }
+        to { background-position: -192px 0; }
     }
 
-    @media (max-width: 768px) {
-      table, thead, tbody, th, td, tr { display: block; }
-      thead { display: none; }
-      tr { margin-bottom: 15px; border: 2px solid var(--sci-fi-cyan); }
-      td { padding-left: 50%; position: relative; text-align: right; border-bottom: 1px solid rgba(0, 255, 255, 0.1); }
-      td:last-child { border-bottom: none; }
-      td::before {
-        content: attr(data-label); position: absolute; left: 10px;
-        width: 45%; padding-right: 10px; white-space: nowrap;
-        text-align: left; font-weight: bold; color: var(--sci-fi-yellow);
-      }
+    @keyframes hero-move {
+        0% { transform: translateX(-50px); }
+        100% { transform: translateX(100vw); }
     }
+    
+    #hero.jump {
+        animation: hero-jump 0.5s steps(1), hero-move 15s linear infinite;
+        background-position: -192px 0;
+    }
+
+    @keyframes hero-jump {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-100px); }
+    }
+
   </style>
 </head>
 <body>
-  <div class="stars"></div>
-  <canvas id="particles-canvas"></canvas>
-
-  <h1 data-text="🏆 Ranking Cósmico GEFIN 🌌"></h1>
-  <p id="loading-thrusters"></p>
-  <div id="highscore-text"></div>
   
-  <table id="ranking" style="visibility: hidden; opacity: 0;">
+  <h1>⛏️ Ranking GEFIN - Salto Vertical 🌲</h1>
+  
+  <p id="loading-chunks">LOADING CHUNKS...</p>
+  
+  <table id="ranking" class="pixelated-content">
     <thead>
       <tr>
         <th>Posição</th>
-        <th>Cadete</th>
-        <th>Salto (m)</th>
+        <th>Nomes</th>
+        <th>Altura (cm)</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
-  
-  <audio id="boot-sound" src="https://actions.google.com/sounds/v1/science_fiction/electronic_boot_up.ogg" preload="auto"></audio>
-  <audio id="row-sound" src="https://actions.google.com/sounds/v1/science_fiction/laser_flyby_short.ogg" preload="auto"></audio>
-  <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/science_fiction/power_up_2.ogg" preload="auto"></audio>
-  <audio id="click-sound" src="https://actions.google.com/sounds/v1/science_fiction/futuristic_blip_short.ogg" preload="auto"></audio>
-  <audio id="podium-sound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm.ogg" preload="auto"></audio>
-  <audio id="winner-sound" src="https://actions.google.com/sounds/v1/impacts/explosion_with_shatter.ogg" preload="auto"></audio>
 
+  <div id="hero"></div>
+
+  <audio id="start-sound" src="https://actions.google.com/sounds/v1/games/fanfare_celebratory.ogg" preload="auto"></audio>
+  <audio id="item-collect" src="https://actions.google.com/sounds/v1/ambiences/objects_rattle.ogg" preload="auto"></audio>
+  <audio id="xp-sound" src="https://actions.google.com/sounds/v1/alarms/digital_alarm.ogg" preload="auto"></audio>
+  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/switches/switch_flick.ogg" preload="auto"></audio>
 
   <script>
-    // --- EFEITOS VISUAIS ---
-    window.addEventListener('mousemove', e => document.body.style.setProperty('--mouse-x', `${e.clientX}px`) && document.body.style.setProperty('--mouse-y', `${e.clientY}px`));
-    
-    function typeText(element, text, onComplete) {
-        let i = 0;
-        element.textContent = "";
-        const interval = setInterval(() => {
-            if (i < text.length) {
-                element.textContent += text[i];
-                i++;
-            } else {
-                clearInterval(interval);
-                if (onComplete) onComplete();
-            }
-        }, 75);
-    }
-    
-    function animateCountUp(element, finalValue) {
-        let current = 0;
-        const step = Math.max(1, Math.floor(finalValue / 30));
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= finalValue) {
-                element.textContent = finalValue;
-                clearInterval(timer);
-            } else {
-                element.textContent = current;
-            }
-        }, 25);
-    }
-    
-    const particlesCanvas = document.getElementById('particles-canvas');
-    const particlesCtx = particlesCanvas.getContext('2d');
-    let particles = [];
-    function triggerParticles(x, y) {
-        particlesCanvas.width = window.innerWidth;
-        particlesCanvas.height = window.innerHeight;
-        for (let i = 0; i < 50; i++) {
-            particles.push({
-                x, y,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 0.5) * 8,
-                size: Math.random() * 5 + 2,
-                color: ['#00ffff', '#ff00ff', '#f7ff00', '#ffffff'][Math.floor(Math.random() * 4)],
-                life: 60
-            });
-        }
-    }
-    function animateParticles() {
-        particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
-        particles = particles.filter(p => p.life > 0);
-        particles.forEach(p => {
-            p.x += p.vx; p.y += p.vy;
-            p.vy += 0.1; p.life--;
-            particlesCtx.fillStyle = p.color;
-            particlesCtx.globalAlpha = p.life / 60;
-            particlesCtx.fillRect(p.x, p.y, p.size, p.size);
-        });
-        particlesCtx.globalAlpha = 1;
-        requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-
-    const invaders = ['👾', '🛸', '👽'];
-    for(let i = 0; i < 5; i++) {
-        const invader = document.createElement('div');
-        invader.className = 'invader';
-        invader.textContent = invaders[i % invaders.length];
-        invader.style.left = `${Math.random() * 100}vw`;
-        invader.style.animationDuration = `${Math.random() * 5 + 8}s`;
-        invader.style.animationDelay = `${Math.random() * 10}s`;
-        document.body.appendChild(invader);
-    }
-
-    const publicSpreadsheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
+    const publicSpreadsheetUrl = 
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
     async function loadRankingData() {
-        const h1 = document.querySelector('h1');
-        const loadingText = document.getElementById('loading-thrusters');
-        document.getElementById('boot-sound').play().catch(e => {});
-        typeText(h1, h1.getAttribute('data-text'), () => typeText(loadingText, "RECEBENDO TRANSMISSÃO..."));
+      document.getElementById('start-sound').play().catch(e => {});
+
+      try {
+        const response = await fetch(publicSpreadsheetUrl);
+        const csvText = await response.text();
+        const data = parseCSV(csvText);
         
-        try {
-            const response = await fetch(publicSpreadsheetUrl);
-            const csvText = await response.text();
-            const data = parseCSV(csvText);
-            
-            await new Promise(r => setTimeout(r, 1500));
-            loadingText.style.transition = 'opacity 0.5s';
-            loadingText.style.opacity = '0';
-            
-            await new Promise(r => setTimeout(r, 500));
-            document.getElementById('ranking').style.visibility = 'visible';
-            document.getElementById('ranking').style.opacity = '1';
-            await showInfo(data);
-        } catch (error) {
-            console.error("Falha:", error);
-            typeText(loadingText, "SINAL PERDIDO");
-        }
+        document.getElementById('loading-chunks').style.display = 'none';
+        
+        await showInfo(data);
+        document.getElementById('ranking').classList.add('loaded');
+
+      } catch (error) {
+        console.error("Falha ao carregar o ranking:", error);
+        const loadingChunks = document.getElementById('loading-chunks');
+        loadingChunks.textContent = "EXPLOSION! DATA CORRUPTED.";
+        loadingChunks.style.color = 'var(--minecraft-lava)';
+      }
     }
 
     function parseCSV(text) {
-        const lines = text.trim().split('\n');
-        const headers = lines[0].split(',').map(h => h.trim());
-        const dataLines = lines.slice(1);
-        return dataLines.map(line => {
-            const values = line.split(',');
-            let entry = {};
-            headers.forEach((header, index) => {
-                entry[header] = values[index]?.trim() || '';
-            });
-            return entry;
-        }).filter(item => item.Nomes && item["Altura máxima (cm)"]); // Filtra linhas vazias
-    }
-    
-    // ================================================================
-    // FUNÇÃO SHOWINFO TOTALMENTE REESCRITA PARA CORRIGIR A ORDENAÇÃO
-    // ================================================================
-    async function showInfo(data) {
-        // 1. ORDENAÇÃO CORRETA: Do maior para o menor.
-        data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
-        
-        const tbody = document.querySelector("#ranking tbody");
-        tbody.innerHTML = "";
-
-        // Mostra todas as posições, uma a uma, começando pelas mais baixas
-        for (let i = 0; i < data.length; i++) {
-            // A posição real é o índice + 1
-            const rank = i + 1;
-            const item = data[i];
-
-            // Adiciona pausa e efeitos especiais para o pódio
-            if(rank <= 3) {
-                await new Promise(r => setTimeout(r, 1500));
-                const highscoreText = document.getElementById('highscore-text');
-                highscoreText.textContent = ''; // Limpa antes de digitar
-                typeText(highscoreText, `REVELANDO TOP ${rank}...`);
-                document.getElementById('podium-sound').play().catch(e=>{});
-                await new Promise(r => setTimeout(r, 1500));
-            } else {
-                await new Promise(r => setTimeout(r, 150));
-            }
-            
-            const row = createRow(item, rank, tbody);
-
-            // Efeitos especiais para o 1º lugar
-            if (rank === 1) {
-                await new Promise(r => setTimeout(r, 500));
-                document.getElementById('winner-sound').play().catch(e=>{});
-                const rect = row.getBoundingClientRect();
-                triggerParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
-                
-                const highscoreText = document.getElementById('highscore-text');
-                highscoreText.textContent = '';
-                typeText(highscoreText, "NEW HIGH SCORE!");
-                highscoreText.classList.add('visible');
-            }
-        }
-    }
-    
-    function createRow(item, rank, tbody) {
-        const row = document.createElement("tr");
-        let medal = "";
-        let rankClass = "";
-        
-        if (rank === 1) { rankClass = "top1"; medal = "🏆"; }
-        else if (rank === 2) { rankClass = "top2"; medal = "🚀"; }
-        else if (rank === 3) { rankClass = "top3"; medal = "⭐"; }
-        if(rankClass) row.classList.add(rankClass);
-
-        const score = parseInt(item["Altura máxima (cm)"], 10) || 0;
-        row.innerHTML = `
-            <td data-label="Posição">${rank}º <span class="medal">${medal}</span></td>
-            <td data-label="Cadete">${item.Nomes}</td> 
-            <td data-label="Salto (m)" class="score-cell">0</td>
-        `;
-        tbody.appendChild(row);
-        
-        animateCountUp(row.querySelector('.score-cell'), score);
-        
-        row.addEventListener('click', () => {
-            row.classList.remove('flash-bang');
-            void row.offsetWidth;
-            row.classList.add('flash-bang');
-            document.getElementById('click-sound').play().catch(e => {});
+      const lines = text.trim().split('\n');
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(',').map(header => header.trim());
+      return lines.slice(1).map(line => {
+        const values = line.split(',').map(value => value.trim());
+        let entry = {};
+        headers.forEach((header, index) => {
+          entry[header] = values[index] || '';
         });
-        return row;
+        return entry;
+      });
     }
     
+    async function showInfo(data) {
+      data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
+      const tbody = document.querySelector("#ranking tbody");
+      tbody.innerHTML = "";
+      const hoverSound = document.getElementById("hover-sound");
+
+      for (const [index, item] of data.entries()) {
+        await new Promise(r => setTimeout(r, 200));
+        document.getElementById("item-collect").play().catch(e => {});
+
+        const row = document.createElement("tr");
+        row.style.animation = 'row-pop-in 0.5s ease-out forwards';
+        
+        let medal = "";
+        if(index === 0) { 
+            row.classList.add("top1"); 
+            medal = "👑"; 
+            document.getElementById("xp-sound").play().catch(e => {});
+            // Faz o herói pular!
+            const hero = document.getElementById('hero');
+            hero.classList.add('jump');
+            setTimeout(() => hero.classList.remove('jump'), 500);
+        }
+        else if(index === 1) { row.classList.add("top2"); medal = "🛡️"; }
+        else if(index === 2) { row.classList.add("top3"); medal = "⚔️"; }
+        
+        row.innerHTML = `
+          <td>${index + 1}º <span class="medal">${medal}</span></td>
+          <td>${item.Nomes}</td> 
+          <td>${item["Altura máxima (cm)"]}</td>
+        `;
+        
+        row.addEventListener('mouseover', () => {
+          hoverSound.currentTime = 0;
+          hoverSound.play().catch(e => {});
+        });
+        
+        tbody.appendChild(row);
+      }
+    }
+
     window.addEventListener("DOMContentLoaded", loadRankingData);
   </script>
+
 </body>
 </html>
