@@ -2,250 +2,268 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ranking GEFIN - Salto Vertical (Minecraft Edition)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking GEFIN - HYPERDRIVE!</title>
   <style>
-    /* Importa fonte pixelizada */
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
 
     :root {
-      --minecraft-grass: #558b2f;
-      --minecraft-dirt: #795548;
-      --minecraft-wood: #8d6e63;
-      --minecraft-stone: #757575;
-      --minecraft-gold: #ffeb3b;
-      --minecraft-diamond: #00bcd4;
-      --minecraft-lava: #ff5722;
-      --minecraft-water: #2196f3;
-      --text-color: #eee;
+      --sci-fi-cyan: #00ffff;
+      --sci-fi-magenta: #ff00ff;
+      --sci-fi-blue: #0077ff;
+      --sci-fi-dark-blue: #020818;
+      --sci-fi-yellow: #f7ff00;
+      /* Propriedades para o scanner do mouse */
+      --mouse-x: 50vw;
+      --mouse-y: 50vh;
     }
 
     body {
-      font-family: 'VT323', monospace; /* Fonte mais "Minecraft" */
-      background-color: #78a7c2; /* Cor base do céu */
-      /* IMAGENS EMBUTIDAS DIRETAMENTE AQUI */
-      background-image: 
-        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVHhe7cwxAQAADMOg+TfdycgDHrgJ5wACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAACAAgAIAAACAAgAIAAAAAACAAgAIAAACAAgAAAAAAIAAACAAgAIAAACAAAAAAAArwDx1gABfr/N0AAAAABJRU5ErkJggg=='), /* Céu pixelizado */
-        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAAgCAYAAAD198enAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFRSURBVHhe7dJBEsQwCAPBCfk/d7cIIZpA2Lq7W1AChAAAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQgjBlzHm3b5d2Y5t29b0s/3s1iMAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCEAQggAIYQACCED+5gE23EYkU6l0mAAAAABJRU5ErkJggg=='); /* Chão de blocos */
-      background-repeat: repeat-x, repeat-x;
-      background-position: top 20px, bottom;
-      background-size: auto, 100% 150px;
-      color: var(--text-color);
+      font-family: 'Orbitron', sans-serif;
+      background-color: var(--sci-fi-dark-blue);
+      color: #fff;
       text-align: center;
-      padding: 20px;
-      overflow-x: hidden;
+      padding: 20px 5%;
+      overflow: hidden; /* Esconde o overflow do scanner */
       position: relative;
     }
-
-    /* Efeito de pixelização leve em todo o conteúdo */
-    .pixelated-content > * {
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
+    
+    /* Efeito de Scanner que segue o mouse */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
+                                    rgba(0, 119, 255, 0.2) 0%, 
+                                    transparent 20%, 
+                                    transparent 100%);
+        z-index: 2;
+        pointer-events: none; /* Permite clicar através dele */
+        transition: background 0.1s ease-out;
     }
 
-    h1 {
-      font-family: 'Press Start 2P', cursive; /* Título mais impactante */
-      color: var(--minecraft-gold);
-      text-shadow: 2px 2px #000, 4px 4px var(--minecraft-dirt);
-      margin-bottom: 30px;
-      font-size: 32px;
-      animation: block-bounce 1s infinite alternate; /* Animação de bloco pulando */
-      padding: 10px 20px;
-      border: 4px solid var(--minecraft-stone);
-      background-color: var(--minecraft-wood);
-      display: inline-block;
-      box-shadow: 6px 6px 0px 0px #000;
+    /* Fundo de estrelas animado */
+    .stars {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #020818 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQflCBgQIRv5Kx2TAAAAe0lEQVRIx2NgGBoAWaAdwAAGZAOALGCiAsoA0gAAVhB8BwD+3yX/X2UMgOqAFLsB/z/D/3+G/+skAP8//2/2/w/ff4a/f5L/b4YBAAFgMv9/hv+/wP8/JP8/I/8//3+G/3+G/5/l/x8A+L8M/z/L/58R/v8f/v8f/v8P//8H/z8DAAAMALs045yLiYpPAAAAAElFTkSuQmCC) repeat;
+      z-index: -1;
+      animation: space-travel 15s linear infinite;
     }
 
-    @keyframes block-bounce {
-      from { transform: translateY(0px); }
-      to { transform: translateY(-10px); }
-    }
-
-    /* Mensagem de Carregamento */
-    #loading-chunks {
-      font-size: 24px;
-      color: var(--minecraft-water);
-      text-shadow: 2px 2px #000;
-      margin-bottom: 30px;
-      animation: blink-minecraft 1.2s infinite steps(1); /* Pisca em pixels */
+    @keyframes space-travel {
+        from { background-position: 0 0; }
+        to { background-position: 256px 256px; }
     }
     
-    @keyframes blink-minecraft {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      color: var(--sci-fi-cyan);
+      text-shadow: 0 0 5px var(--sci-fi-cyan), 0 0 10px var(--sci-fi-cyan), 0 0 20px var(--sci-fi-magenta);
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      margin-bottom: 30px;
+    }
+
+    /* Mensagem de loading */
+    #loading-thrusters {
+      font-size: clamp(1rem, 4vw, 1.5rem);
+      color: var(--sci-fi-yellow);
+      text-shadow: 0 0 5px var(--sci-fi-yellow);
+      margin: 100px 0;
+      min-height: 1.5rem; /* Evita que a página pule */
     }
     
     table {
-      margin: 40px auto;
-      border-collapse: collapse;
-      width: 80%;
-      background: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente escuro */
-      border: 5px solid var(--minecraft-stone);
-      box-shadow: 8px 8px 0px 0px #000;
-      visibility: hidden; /* Começa escondida */
+      margin: 0 auto;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      max-width: 900px;
+      background: rgba(10, 25, 47, 0.85);
+      border: 2px solid var(--sci-fi-cyan);
+      box-shadow: 0 0 15px var(--sci-fi-cyan);
+      backdrop-filter: blur(5px);
+      visibility: hidden;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: scale(0.95);
     }
     
     table.loaded {
       visibility: visible;
       opacity: 1;
+      transform: scale(1);
     }
 
     th, td {
       padding: 15px;
-      border: 2px solid var(--minecraft-stone);
-      font-size: 18px;
-      text-shadow: 1px 1px #000;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
     }
-
+    
     th {
-      background: var(--minecraft-dirt);
-      color: var(--minecraft-gold);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.8rem;
+      color: var(--sci-fi-yellow);
     }
-
+    
     tbody tr {
-      transition: background-color 0.2s, color 0.2s, transform 0.1s ease-out;
+        opacity: 0;
+        transform: translateX(-50px);
+        animation: row-fly-in 0.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    tbody tr:nth-child(even) { background: rgba(20, 20, 20, 0.7); }
-    tbody tr:nth-child(odd) { background: rgba(30, 30, 30, 0.7); }
-
-    tbody tr:hover {
-      background-color: var(--minecraft-grass);
-      color: #fff;
-      transform: scale(1.01); /* Leve zoom ao passar o mouse */
-      cursor: pointer;
+    @keyframes row-fly-in {
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    tbody tr.flash {
+        animation: row-flash 0.4s ease-out;
+    }
+    @keyframes row-flash {
+        0%, 100% { background-color: transparent; }
+        50% { background-color: rgba(0, 255, 255, 0.3); }
     }
 
     .top1 {
-      background: var(--minecraft-gold) !important;
-      color: #000;
-      font-size: 20px;
+      font-size: 1.2rem;
       font-weight: bold;
-      animation: top1-shimmer 2s infinite alternate; /* Brilho de ouro */
-      border: 3px solid var(--minecraft-diamond); /* Borda de diamante */
-      box-shadow: 0 0 15px var(--minecraft-gold), 0 0 25px var(--minecraft-diamond);
+      animation: top1-pulse 2s infinite;
+      border-top: 2px solid var(--sci-fi-yellow);
+      border-bottom: 2px solid var(--sci-fi-yellow) !important;
     }
 
-    @keyframes top1-shimmer {
-      from { background-color: var(--minecraft-gold); }
-      to { background-color: #ffda4a; }
+    @keyframes top1-pulse {
+      0%, 100% { background-color: rgba(247, 255, 0, 0.1); box-shadow: 0 0 15px 5px rgba(247, 255, 0, 0.2); }
+      50% { background-color: rgba(247, 255, 0, 0.2); box-shadow: 0 0 25px 10px rgba(247, 255, 0, 0.4); }
     }
 
-    .top2 { 
-      background: var(--minecraft-stone) !important; 
-      color: #fff; 
-      font-size: 19px; 
-      font-weight: bold; 
-      border: 3px solid var(--minecraft-stone);
-    }
-    .top3 { 
-      background: var(--minecraft-dirt) !important; 
-      color: #fff; 
-      font-size: 18px; 
-      font-weight: bold; 
-      border: 3px solid var(--minecraft-dirt);
-    }
+    .medal { font-size: 1.5rem; display: inline-block; }
 
-    .medal {
-      font-size: 28px; /* Medalhas maiores */
-      animation: medal-craft-pulse 1s infinite alternate;
-      display: inline-block;
-      text-shadow: 2px 2px #000;
-    }
-
-    @keyframes medal-craft-pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); color: var(--minecraft-lava); }
-    }
-    
-    /* Personagem 8-bit */
-    #hero {
-        width: 48px;
-        height: 64px;
-        /* IMAGEM DO PERSONAGEM EMBUTIDA */
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAAD0eI4jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVHhe7dJNKwRRFAbg/+9+lwghIgmFkGhIKGkhIWRDIbFQyAb5A1JISCFRyEJCkjdIssF/yGYjP4qEbEOh5e7s6p7pGvA5s3tmt2f/zJk5s3t3d3eP5/f7L/N8Ph8LAIA/4/P5fPz+AQAAvs7n8/ECAAB/yufz8QIAAABAAAAAAAAAAAAAAAAAAAAAAAAA/yK63ySAcuuLKCwzPst3dEA5Y1WpTtViT8ICb2Z4l+8eQDEKDeVWeYhX5GZ4lu8eQI0sN5Vr5CYg8xOW4Vu+ewB1srJSrRbyEpSZgV+9+e4BFCvLhXwtp/wEpcxQz/I9AChWlgO5hTwhLwEBM8zzPQEoVpYKuVZOPIFfBpgYnucbgLJSrRZyjJzkE/gqQJTB8z0BKKuLhXwhL/EJTDDM8z0BKCvdQp4QH/EEZpjlex9QrCwX8kO8xCdQxPB9D6BY6S7kC/EJnGB4vucBxUq/kAfEJzABDM/3PKBYKZdyjfgEJiDm+Z4HVCvLhXwhLuITWJjh+Z4HVCvlQu4Ql/gENsxwPAQAyq1cKxdxj7jEJfAQAChXloP4jbjEJ/ADAEBllQt5Q1ziEpSA+R4AFCvdQ1ziEpSA+R4AFCvdQ1ziEpSA+R4AFL1/AH5L6BHF2bcoAAAAAElFTkSuQmCC') 0 0;
+    /* Cometa animado */
+    #comet {
         position: fixed;
-        bottom: 85px;
-        left: 0;
-        animation: hero-run 0.5s steps(4) infinite, hero-move 15s linear infinite;
-        z-index: 100;
-        image-rendering: pixelated; /* Garante que o personagem fique pixelado */
+        font-size: 2.5rem;
+        bottom: 50%;
+        left: -100px;
+        animation: comet-fly 25s linear infinite;
+        animation-delay: 3s;
+        z-index: 10;
+        text-shadow: 0 0 10px #fff, 0 0 20px var(--sci-fi-cyan), 0 0 40px var(--sci-fi-cyan);
+    }
+    @keyframes comet-fly {
+        0% { transform: translateX(0) rotate(15deg); }
+        100% { transform: translateX(120vw) rotate(15deg); }
     }
 
-    @keyframes hero-run {
-        from { background-position: 0 0; }
-        to { background-position: -192px 0; }
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tr { margin-bottom: 15px; border: 2px solid var(--sci-fi-cyan); }
+      td { padding-left: 50%; position: relative; text-align: right; border-bottom: 1px solid rgba(0, 255, 255, 0.1); }
+      td:last-child { border-bottom: none; }
+      td::before {
+        content: attr(data-label);
+        position: absolute; left: 10px; width: 45%;
+        padding-right: 10px; white-space: nowrap;
+        text-align: left; font-weight: bold;
+        color: var(--sci-fi-yellow);
+      }
     }
-
-    @keyframes hero-move {
-        0% { transform: translateX(-50px); }
-        100% { transform: translateX(100vw); }
-    }
-    
-    #hero.jump {
-        animation: hero-jump 0.5s steps(1), hero-move 15s linear infinite;
-        background-position: -192px 0;
-    }
-
-    @keyframes hero-jump {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-100px); }
-    }
-
   </style>
 </head>
 <body>
+  <div class="stars"></div>
+  <div id="comet">☄️</div>
+
+  <h1 data-text="🏆 Ranking GEFIN - Salto contramovimento 🌌"></h1>
   
-  <h1>⛏️ Ranking GEFIN - Salto Vertical 🌲</h1>
+  <p id="loading-thrusters"></p>
   
-  <p id="loading-chunks">LOADING CHUNKS...</p>
-  
-  <table id="ranking" class="pixelated-content">
+  <table id="ranking">
     <thead>
       <tr>
         <th>Posição</th>
-        <th>Nomes</th>
-        <th>Altura (cm)</th>
+        <th>Cadete</th>
+        <th>Salto (m)</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
-
-  <div id="hero"></div>
-
-  <audio id="start-sound" src="https://actions.google.com/sounds/v1/games/fanfare_celebratory.ogg" preload="auto"></audio>
-  <audio id="item-collect" src="https://actions.google.com/sounds/v1/ambiences/objects_rattle.ogg" preload="auto"></audio>
-  <audio id="xp-sound" src="https://actions.google.com/sounds/v1/alarms/digital_alarm.ogg" preload="auto"></audio>
-  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/switches/switch_flick.ogg" preload="auto"></audio>
+  
+  <audio id="boot-sound" src="https://actions.google.com/sounds/v1/science_fiction/electronic_boot_up.ogg" preload="auto"></audio>
+  <audio id="row-sound" src="https://actions.google.com/sounds/v1/science_fiction/laser_flyby.ogg" preload="auto"></audio>
+  <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/science_fiction/power_up_2.ogg" preload="auto"></audio>
+  <audio id="click-sound" src="https://actions.google.com/sounds/v1/science_fiction/futuristic_blip_short.ogg" preload="auto"></audio>
 
   <script>
-    const publicSpreadsheetUrl = 
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
+    // --- EFEITO DE SCANNER DO MOUSE ---
+    window.addEventListener('mousemove', e => {
+      document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+    });
+
+    // --- FUNÇÃO PARA ANIMAÇÃO DE TEXTO (BOOT SEQUENCE) ---
+    function typeScramble(element, text, onComplete) {
+        let i = 0;
+        const chars = '!<>-_\\/[]{}—=+*^?#________';
+        const interval = setInterval(() => {
+            element.textContent = text.substring(0, i) + 
+                                  Array.from({length: text.length - i}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+            i++;
+            if (i > text.length) {
+                clearInterval(interval);
+                element.textContent = text;
+                if (onComplete) onComplete();
+            }
+        }, 50);
+    }
+    
+    // --- FUNÇÃO PARA ANIMAÇÃO DE CONTAGEM DE NÚMEROS ---
+    function animateCountUp(element, finalValue) {
+        let start = 0;
+        const duration = 750; // 0.75 segundos
+        const stepTime = Math.abs(Math.floor(duration / finalValue));
+        const timer = setInterval(() => {
+            start += 1;
+            element.textContent = start;
+            if (start === finalValue) {
+                clearInterval(timer);
+            }
+        }, stepTime);
+    }
+
+    const publicSpreadsheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
     async function loadRankingData() {
-      document.getElementById('start-sound').play().catch(e => {});
+      const h1 = document.querySelector('h1');
+      const loadingText = document.getElementById('loading-thrusters');
+      document.getElementById('boot-sound').play().catch(e => {});
+
+      typeScramble(h1, h1.getAttribute('data-text'), () => {
+          typeScramble(loadingText, "CALIBRANDO PROPULSORES...");
+      });
+      
+      await new Promise(r => setTimeout(r, 2000));
 
       try {
         const response = await fetch(publicSpreadsheetUrl);
         const csvText = await response.text();
         const data = parseCSV(csvText);
         
-        document.getElementById('loading-chunks').style.display = 'none';
+        loadingText.style.transition = 'opacity 0.5s';
+        loadingText.style.opacity = '0';
         
-        await showInfo(data);
+        await new Promise(r => setTimeout(r, 500));
         document.getElementById('ranking').classList.add('loaded');
+        await showInfo(data);
 
       } catch (error) {
-        console.error("Falha ao carregar o ranking:", error);
-        const loadingChunks = document.getElementById('loading-chunks');
-        loadingChunks.textContent = "EXPLOSION! DATA CORRUPTED.";
-        loadingChunks.style.color = 'var(--minecraft-lava)';
+        console.error("Falha:", error);
+        typeScramble(loadingText, "ERRO DE TELEMETRIA");
       }
     }
 
@@ -256,9 +274,7 @@
       return lines.slice(1).map(line => {
         const values = line.split(',').map(value => value.trim());
         let entry = {};
-        headers.forEach((header, index) => {
-          entry[header] = values[index] || '';
-        });
+        headers.forEach((header, index) => { entry[header] = values[index] || ''; });
         return entry;
       });
     }
@@ -267,45 +283,49 @@
       data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
       const tbody = document.querySelector("#ranking tbody");
       tbody.innerHTML = "";
-      const hoverSound = document.getElementById("hover-sound");
 
       for (const [index, item] of data.entries()) {
-        await new Promise(r => setTimeout(r, 200));
-        document.getElementById("item-collect").play().catch(e => {});
+        await new Promise(r => setTimeout(r, 150));
+        const rowSound = document.getElementById("row-sound");
+        rowSound.currentTime = 0;
+        rowSound.play().catch(e => {});
 
         const row = document.createElement("tr");
-        row.style.animation = 'row-pop-in 0.5s ease-out forwards';
-        
+        row.style.animationDelay = `${index * 0.1}s`;
+
         let medal = "";
         if(index === 0) { 
-            row.classList.add("top1"); 
-            medal = "👑"; 
-            document.getElementById("xp-sound").play().catch(e => {});
-            // Faz o herói pular!
-            const hero = document.getElementById('hero');
-            hero.classList.add('jump');
-            setTimeout(() => hero.classList.remove('jump'), 500);
+          row.classList.add("top1"); 
+          medal = "🪐"; 
+          document.getElementById("powerup-sound").play().catch(e => {});
         }
-        else if(index === 1) { row.classList.add("top2"); medal = "🛡️"; }
-        else if(index === 2) { row.classList.add("top3"); medal = "⚔️"; }
+        else if(index === 1) { medal = "🚀"; }
+        else if(index === 2) { medal = "⭐"; }
         
+        const score = parseInt(item["Altura máxima (cm)"], 10) || 0;
         row.innerHTML = `
-          <td>${index + 1}º <span class="medal">${medal}</span></td>
-          <td>${item.Nomes}</td> 
-          <td>${item["Altura máxima (cm)"]}</td>
+          <td data-label="Posição">${index + 1}º <span class="medal">${medal}</span></td>
+          <td data-label="Cadete">${item.Nomes}</td> 
+          <td data-label="Salto (m)" class="score-cell">${0}</td>
         `;
-        
-        row.addEventListener('mouseover', () => {
-          hoverSound.currentTime = 0;
-          hoverSound.play().catch(e => {});
-        });
-        
         tbody.appendChild(row);
+
+        // Inicia a contagem do placar
+        const scoreCell = row.querySelector('.score-cell');
+        animateCountUp(scoreCell, score);
+        
+        // Adiciona interatividade de clique
+        row.addEventListener('click', () => {
+            row.classList.remove('flash'); // Reseta a animação se já estiver lá
+            void row.offsetWidth; // Truque para reiniciar a animação CSS
+            row.classList.add('flash');
+            document.getElementById('click-sound').play().catch(e => {});
+            row.addEventListener('animationend', () => row.classList.remove('flash'), { once: true });
+        });
       }
     }
-
+    
     window.addEventListener("DOMContentLoaded", loadRankingData);
   </script>
-
 </body>
 </html>
