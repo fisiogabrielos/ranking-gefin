@@ -2,73 +2,127 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ranking GEFIN - Arcade Turbo Edition!</title>
+  <title>Ranking GEFIN - ULTRA ARCADE!</title>
   <style>
-    @import url('https://fonts.googleapis.comcom/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     :root {
-      --arcade-yellow: #ffcc00;
+      --arcade-yellow: #ffdd00;
       --arcade-red: #ff0066;
       --arcade-blue: #00ffff;
+      --arcade-green: #00ff00;
     }
 
     body {
-      font-family: 'Press Start 2P', cursive;
-      background: #0a0a0a;
+      font-family: 'Press+Start+2P', cursive;
+      background: #000;
       color: #fff;
       text-align: center;
       padding: 20px;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Efeito de linhas de TV antiga (Scanlines) */
+    body::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.4) 50%);
+        background-size: 100% 4px;
+        animation: scanlines 0.2s linear infinite;
+        opacity: 0.3;
+        pointer-events: none;
+        z-index: 1000;
+    }
+
+    @keyframes scanlines {
+        from { background-position: 0 0; }
+        to { background-position: 0 4px; }
+    }
+
+    /* Fundo de Matriz */
+    #matrix-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
     }
 
     h1 {
       color: var(--arcade-yellow);
-      text-shadow: 3px 3px var(--arcade-red);
+      text-shadow: 0 0 5px var(--arcade-yellow), 0 0 10px var(--arcade-yellow), 0 0 20px var(--arcade-red);
       margin-bottom: 30px;
-      font-size: 24px;
-      animation: title-blink 1.5s infinite alternate;
+      font-size: 28px;
+      animation: neon-glow 1.5s infinite alternate ease-in-out;
+      letter-spacing: 2px;
     }
 
-    @keyframes title-blink {
-      from { opacity: 1; }
-      to { opacity: 0.8; }
+    @keyframes neon-glow {
+      from { text-shadow: 0 0 5px var(--arcade-yellow), 0 0 10px var(--arcade-yellow), 0 0 20px var(--arcade-red); }
+      to { text-shadow: 0 0 10px var(--arcade-yellow), 0 0 20px var(--arcade-blue), 0 0 40px var(--arcade-blue); }
     }
 
+    /* Mensagem "Insert Coin" */
+    #insert-coin {
+      font-size: 22px;
+      color: var(--arcade-green);
+      text-shadow: 0 0 5px var(--arcade-green);
+      margin-bottom: 30px;
+      animation: blink-fast 0.8s infinite;
+    }
+    
+    @keyframes blink-fast {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
     table {
       margin: 0 auto;
       border-collapse: collapse;
       width: 80%;
-      background: #000000d0;
-      box-shadow: 0 0 20px var(--arcade-yellow), 0 0 30px var(--arcade-red);
-      border: 5px solid var(--arcade-yellow);
-      animation: table-entry 1s ease-out forwards;
-      backdrop-filter: blur(2px);
+      background: #11111199;
+      box-shadow: 0 0 20px var(--arcade-blue), 0 0 30px var(--arcade-red);
+      border: 3px solid var(--arcade-blue);
+      backdrop-filter: blur(3px);
+      visibility: hidden; /* Começa escondida */
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
     }
-
-    @keyframes table-entry {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
+    
+    table.loaded {
+      visibility: visible;
+      opacity: 1;
     }
 
     th, td {
       padding: 15px;
-      border: 2px solid var(--arcade-yellow);
+      border: 2px solid var(--arcade-blue);
       font-size: 15px;
       text-shadow: 1px 1px #000;
+      transition: background-color 0.2s, color 0.2s;
     }
 
     th {
       background: var(--arcade-red);
       color: #fff;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
-    tr:nth-child(even) { background: #111111d0; }
-    tr:nth-child(odd) { background: #222222d0; }
+    tbody tr:hover {
+      background-color: var(--arcade-yellow);
+      color: #000;
+      cursor: pointer;
+    }
 
     .top1 {
-      background: #ffd700 !important;
+      background: var(--arcade-yellow) !important;
       color: #000;
       font-size: 18px;
       font-weight: bold;
@@ -76,8 +130,8 @@
     }
 
     @keyframes top1-glow {
-      from { box-shadow: 0 0 10px #ffd700; }
-      to { box-shadow: 0 0 20px #ffd700, 0 0 30px var(--arcade-red); }
+      from { box-shadow: 0 0 15px #ffd700; }
+      to { box-shadow: 0 0 30px #ffd700, 0 0 45px var(--arcade-red); }
     }
 
     .top2 { background: #c0c0c0 !important; color: #000; font-size: 16px; font-weight: bold; }
@@ -90,90 +144,85 @@
     }
 
     @keyframes medal-pulse {
-      from { transform: scale(1); }
-      to { transform: scale(1.1); }
-    }
-
-    .footer-arcade {
-        margin-top: 40px;
-        color: var(--arcade-blue);
-        text-shadow: 1px 1px #000;
-        font-size: 18px;
-        animation: footer-blink 2s infinite alternate;
-    }
-
-    @keyframes footer-blink {
-        from { opacity: 1; }
-        to { opacity: 0.5; }
+      from { transform: scale(1) rotate(-5deg); }
+      to { transform: scale(1.1) rotate(5deg); }
     }
   </style>
 </head>
 <body>
-  <h1>🏆 Ranking GEFIN – Salto Vertical 🕹️</h1>
+  <canvas id="matrix-bg"></canvas>
+
+  <h1>🏆 RANKING GEFIN 🕹️</h1>
+  
+  <p id="insert-coin">INSERT COIN</p>
   
   <table id="ranking">
     <thead>
       <tr>
         <th>Posição</th>
         <th>Nomes</th>
-        <th>Altura máxima (cm)</th>
+        <th>Altura (cm)</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
-  <p class="footer-arcade">Ready Player One?</p>
-
-  <audio id="coin" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
-  <audio id="levelup" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
+  <audio id="start-sound" src="https://actions.google.com/sounds/v1/foley/computer_keyboard_typing_fast.ogg" preload="auto"></audio>
+  <audio id="coin" src="https://actions.google.com/sounds/v1/coins/coin_drop.ogg" preload="auto"></audio>
+  <audio id="levelup" src="https://actions.google.com/sounds/v1/alarms/digital_alarm.ogg" preload="auto"></audio>
+  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/switches/switch_ flick.ogg" preload="auto"></audio>
 
   <script>
     const publicSpreadsheetUrl = 
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1PFABZm_ON5E8_cMwlbVu6MZcHFAyyptjHNae4PYXkPVq4rBfd1-T0O1opyxn50M_krEEIo1MSec2/pub?output=csv";
 
     async function loadRankingData() {
+      document.getElementById('start-sound').play().catch(e => {});
+
       try {
         const response = await fetch(publicSpreadsheetUrl);
-        if (!response.ok) {
-          throw new Error('Erro ao buscar os dados da planilha.');
-        }
         const csvText = await response.text();
         const data = parseCSV(csvText);
+        
+        // Esconde "INSERT COIN" e mostra a tabela
+        document.getElementById('insert-coin').style.display = 'none';
+        document.getElementById('ranking').classList.add('loaded');
+
         showInfo(data);
       } catch (error) {
         console.error("Falha ao carregar o ranking:", error);
-        const tbody = document.querySelector("#ranking tbody");
-        tbody.innerHTML = '<tr><td colspan="3">Não foi possível carregar os dados. Verifique a planilha e o console (F12).</td></tr>';
+        const insertCoin = document.getElementById('insert-coin');
+        insertCoin.textContent = "GAME OVER - DATA ERROR";
       }
     }
 
     function parseCSV(text) {
       const lines = text.trim().split('\n');
-      if (lines.length < 2) return []; // Retorna vazio se não tiver dados
+      if (lines.length < 2) return [];
       const headers = lines[0].split(',').map(header => header.trim());
       return lines.slice(1).map(line => {
         const values = line.split(',').map(value => value.trim());
         let entry = {};
         headers.forEach((header, index) => {
-          entry[header] = values[index] || ''; // Garante que não seja undefined
+          entry[header] = values[index] || '';
         });
         return entry;
       });
     }
     
-    // Versão simplificada e mais segura da função de exibição
-    function showInfo(data) {
-      document.getElementById("coin").play().catch(e => {});
-
+    async function showInfo(data) {
       data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
-
       const tbody = document.querySelector("#ranking tbody");
       tbody.innerHTML = "";
+      const hoverSound = document.getElementById("hover-sound");
 
-      data.forEach((item, index) => {
+      for (const [index, item] of data.entries()) {
+        await new Promise(r => setTimeout(r, 150)); // Delay para cada linha
+        document.getElementById("coin").play().catch(e => {});
+
         const row = document.createElement("tr");
         let medal = "";
-        if(index === 0) { row.classList.add("top1"); medal = "🥇"; playLevelUp(); }
+        if(index === 0) { row.classList.add("top1"); medal = "🏆"; document.getElementById("levelup").play().catch(e => {}); }
         else if(index === 1) { row.classList.add("top2"); medal = "🥈"; }
         else if(index === 2) { row.classList.add("top3"); medal = "🥉"; }
         
@@ -182,16 +231,42 @@
           <td>${item.Nomes}</td> 
           <td>${item["Altura máxima (cm)"]}</td>
         `;
+        
+        row.addEventListener('mouseover', () => {
+          hoverSound.currentTime = 0;
+          hoverSound.play().catch(e => {});
+        });
+        
         tbody.appendChild(row);
-      });
+      }
     }
 
-    function playLevelUp() {
-      const sound = document.getElementById("levelup");
-      sound.currentTime = 0;
-      sound.play().catch(e => {});
-    }
+    // Script para o fundo de Matriz
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%';
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
 
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px arial';
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 33);
+    
     window.addEventListener("DOMContentLoaded", loadRankingData);
   </script>
 </body>
