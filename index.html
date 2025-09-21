@@ -2,83 +2,57 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ranking GEFIN - Salto Vertical</title>
+  <title>Ranking GEFIN - Super World!</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     :root {
-      --arcade-yellow: #ffdd00;
-      --arcade-red: #ff0066;
-      --arcade-blue: #00ffff;
-      --arcade-green: #00ff00;
+      --mario-blue: #5c94fc;
+      --mario-green: #40b040;
+      --mario-brown: #a04020;
+      --mario-yellow: #fac000;
+      --mario-red: #e04040;
     }
 
     body {
       font-family: 'Press Start 2P', cursive;
-      background: #000;
+      background-color: var(--mario-blue);
+      background-image: 
+        url(https://i.imgur.com/gK9dY9N.png), /* Nuvens pixeladas */
+        url(https://i.imgur.com/uR1j9B9.png); /* Chão de blocos */
+      background-repeat: repeat-x, repeat-x;
+      background-position: top 20px, bottom;
+      background-size: auto, 100% 150px;
       color: #fff;
       text-align: center;
       padding: 20px;
-      overflow: hidden;
+      overflow-x: hidden;
       position: relative;
-    }
-    
-    /* Efeito de linhas de TV antiga (Scanlines) */
-    body::after {
-        content: " ";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(0deg, transparent 50%, rgba(0,0,0,0.4) 50%);
-        background-size: 100% 4px;
-        animation: scanlines 0.2s linear infinite;
-        opacity: 0.3;
-        pointer-events: none;
-        z-index: 1000;
-    }
-
-    @keyframes scanlines {
-        from { background-position: 0 0; }
-        to { background-position: 0 4px; }
-    }
-
-    /* Fundo de Matriz */
-    #matrix-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
     }
 
     h1 {
-      color: var(--arcade-yellow);
-      text-shadow: 0 0 5px var(--arcade-yellow), 0 0 10px var(--arcade-yellow), 0 0 20px var(--arcade-red);
+      color: var(--mario-yellow);
+      text-shadow: 3px 3px #000, 6px 6px var(--mario-brown);
       margin-bottom: 30px;
-      font-size: 28px;
-      animation: neon-glow 1.5s infinite alternate ease-in-out;
-      letter-spacing: 2px;
+      font-size: 32px;
+      animation: title-bounce 0.5s infinite alternate ease-in-out;
     }
 
-    @keyframes neon-glow {
-      from { text-shadow: 0 0 5px var(--arcade-yellow), 0 0 10px var(--arcade-yellow), 0 0 20px var(--arcade-red); }
-      to { text-shadow: 0 0 10px var(--arcade-yellow), 0 0 20px var(--arcade-blue), 0 0 40px var(--arcade-blue); }
-    }
-
-    /* Mensagem "Insert Coin" */
-    #insert-coin {
-      font-size: 22px;
-      color: var(--arcade-green);
-      text-shadow: 0 0 5px var(--arcade-green);
-      margin-bottom: 30px;
-      animation: blink-fast 0.8s infinite;
+    @keyframes title-bounce {
+        from { transform: translateY(0); }
+        to { transform: translateY(-8px); }
     }
     
-    @keyframes blink-fast {
+    /* Mensagem "Press Start" */
+    #press-start {
+      font-size: 24px;
+      color: #fff;
+      text-shadow: 2px 2px #000;
+      margin: 100px 0;
+      animation: blink-press-start 1s infinite steps(1);
+    }
+    
+    @keyframes blink-press-start {
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
@@ -87,13 +61,12 @@
       margin: 0 auto;
       border-collapse: collapse;
       width: 80%;
-      background: #11111199;
-      box-shadow: 0 0 20px var(--arcade-blue), 0 0 30px var(--arcade-red);
-      border: 3px solid var(--arcade-blue);
-      backdrop-filter: blur(3px);
-      visibility: hidden; /* Começa escondida */
+      background: #000000aa;
+      border: 5px solid #fff;
+      box-shadow: 0 0 0 5px #000; /* Borda dupla estilo 8-bit */
+      visibility: hidden;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 0.5s ease;
     }
     
     table.loaded {
@@ -103,58 +76,96 @@
 
     th, td {
       padding: 15px;
-      border: 2px solid var(--arcade-blue);
-      font-size: 15px;
-      text-shadow: 1px 1px #000;
-      transition: background-color 0.2s, color 0.2s;
+      border: 3px solid #000;
+      font-size: 16px;
     }
 
     th {
-      background: var(--arcade-red);
+      background: var(--mario-blue);
       color: #fff;
-      text-transform: uppercase;
+      text-shadow: 2px 2px #000;
+    }
+
+    tbody tr {
+        animation: row-appear 0.5s forwards;
+    }
+
+    @keyframes row-appear {
+        from { opacity: 0; transform: scale(0.5); }
+        to { opacity: 1; transform: scale(1); }
     }
 
     tbody tr:hover {
-      background-color: var(--arcade-yellow);
-      color: #000;
-      cursor: pointer;
+      background-color: var(--mario-green);
+      cursor: help; /* Cursor de ajuda/interrogação */
     }
 
-    .top1 {
-      background: var(--arcade-yellow) !important;
-      color: #000;
-      font-size: 18px;
-      font-weight: bold;
-      animation: top1-glow 1.5s infinite alternate;
-    }
-
-    @keyframes top1-glow {
-      from { box-shadow: 0 0 15px #ffd700; }
-      to { box-shadow: 0 0 30px #ffd700, 0 0 45px var(--arcade-red); }
-    }
-
-    .top2 { background: #c0c0c0 !important; color: #000; font-size: 16px; font-weight: bold; }
-    .top3 { background: #cd7f32 !important; color: #000; font-size: 16px; font-weight: bold; }
+    .top1 { background: var(--mario-yellow) !important; color: #000; font-size: 20px; font-weight: bold; }
+    .top2 { background: #c0c0c0 !important; color: #000; font-size: 18px; font-weight: bold; }
+    .top3 { background: var(--mario-red) !important; color: #fff; font-size: 18px; font-weight: bold; }
 
     .medal {
-      font-size: 22px;
-      animation: medal-pulse 1s infinite alternate;
+      font-size: 24px;
+      animation: medal-spin 1s linear infinite;
       display: inline-block;
     }
 
-    @keyframes medal-pulse {
-      from { transform: scale(1) rotate(-5deg); }
-      to { transform: scale(1.1) rotate(5deg); }
+    @keyframes medal-spin {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
     }
+    
+    /* Personagem 8-bit */
+    #hero {
+        width: 48px;
+        height: 64px;
+        background: url(https://i.imgur.com/Jp02Tj9.png) 0 0;
+        position: fixed;
+        bottom: 85px;
+        left: 0;
+        animation: hero-run 0.5s steps(4) infinite, hero-move 15s linear infinite;
+        z-index: 100;
+    }
+
+    @keyframes hero-run {
+        from { background-position: 0 0; }
+        to { background-position: -192px 0; }
+    }
+
+    @keyframes hero-move {
+        0% { transform: translateX(-50px); }
+        100% { transform: translateX(100vw); }
+    }
+    
+    #hero.jump {
+        animation: hero-jump 0.5s steps(1), hero-move 15s linear infinite;
+        background-position: -192px 0;
+    }
+
+    @keyframes hero-jump {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-100px); }
+    }
+    
+    /* Confete */
+    #confetti-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 999;
+    }
+
   </style>
 </head>
 <body>
-  <canvas id="matrix-bg"></canvas>
+  <canvas id="confetti-canvas"></canvas>
 
-  <h1>🏆 Ranking GEFIN - Salto Vertical 🕹️</h1>
+  <h1>🏆 Ranking GEFIN - Salto Vertical 🍄</h1>
   
-  <p id="insert-coin">INSERT COIN</p>
+  <p id="press-start">PRESS START</p>
   
   <table id="ranking">
     <thead>
@@ -167,10 +178,11 @@
     <tbody></tbody>
   </table>
 
-  <audio id="start-sound" src="https://actions.google.com/sounds/v1/foley/computer_keyboard_typing_fast.ogg" preload="auto"></audio>
-  <audio id="coin" src="https://actions.google.com/sounds/v1/coins/coin_drop.ogg" preload="auto"></audio>
-  <audio id="levelup" src="https://actions.google.com/sounds/v1/alarms/digital_alarm.ogg" preload="auto"></audio>
-  <audio id="hover-sound" src="https://actions.google.com/sounds/v1/switches/switch_flick.ogg" preload="auto"></audio>
+  <div id="hero"></div>
+
+  <audio id="start-sound" src="https://actions.google.com/sounds/v1/games/game_start.ogg" preload="auto"></audio>
+  <audio id="coin-sound" src="https://actions.google.com/sounds/v1/arcade_games/coin_collect.ogg" preload="auto"></audio>
+  <audio id="powerup-sound" src="https://actions.google.com/sounds/v1/arcade_games/power_up.ogg" preload="auto"></audio>
 
   <script>
     const publicSpreadsheetUrl = 
@@ -179,20 +191,23 @@
     async function loadRankingData() {
       document.getElementById('start-sound').play().catch(e => {});
 
+      // Simula um "loading" antes de buscar os dados
+      await new Promise(r => setTimeout(r, 1500));
+
       try {
         const response = await fetch(publicSpreadsheetUrl);
         const csvText = await response.text();
         const data = parseCSV(csvText);
         
-        // Esconde "INSERT COIN" e mostra a tabela
-        document.getElementById('insert-coin').style.display = 'none';
+        document.getElementById('press-start').style.display = 'none';
         document.getElementById('ranking').classList.add('loaded');
 
-        showInfo(data);
+        await showInfo(data);
+        triggerConfetti(); // Chuva de confete no final!
       } catch (error) {
-        console.error("Falha ao carregar o ranking:", error);
-        const insertCoin = document.getElementById('insert-coin');
-        insertCoin.textContent = "GAME OVER - DATA ERROR";
+        console.error("Falha:", error);
+        const pressStart = document.getElementById('press-start');
+        pressStart.textContent = "GAME OVER";
       }
     }
 
@@ -203,9 +218,7 @@
       return lines.slice(1).map(line => {
         const values = line.split(',').map(value => value.trim());
         let entry = {};
-        headers.forEach((header, index) => {
-          entry[header] = values[index] || '';
-        });
+        headers.forEach((header, index) => { entry[header] = values[index] || ''; });
         return entry;
       });
     }
@@ -214,58 +227,76 @@
       data.sort((a, b) => parseFloat(b["Altura máxima (cm)"]) - parseFloat(a["Altura máxima (cm)"]));
       const tbody = document.querySelector("#ranking tbody");
       tbody.innerHTML = "";
-      const hoverSound = document.getElementById("hover-sound");
 
       for (const [index, item] of data.entries()) {
-        await new Promise(r => setTimeout(r, 150)); // Delay para cada linha
-        document.getElementById("coin").play().catch(e => {});
+        await new Promise(r => setTimeout(r, 300));
+        document.getElementById("coin-sound").play().catch(e => {});
 
         const row = document.createElement("tr");
         let medal = "";
-        if(index === 0) { row.classList.add("top1"); medal = "🏆"; document.getElementById("levelup").play().catch(e => {}); }
-        else if(index === 1) { row.classList.add("top2"); medal = "🥈"; }
-        else if(index === 2) { row.classList.add("top3"); medal = "🥉"; }
+        if(index === 0) { 
+          row.classList.add("top1"); 
+          medal = "🪙"; // Moeda de Ouro
+          document.getElementById("powerup-sound").play().catch(e => {});
+          // Faz o herói pular!
+          const hero = document.getElementById('hero');
+          hero.classList.add('jump');
+          setTimeout(() => hero.classList.remove('jump'), 500);
+        }
+        else if(index === 1) { row.classList.add("top2"); medal = "⭐"; } // Estrela
+        else if(index === 2) { row.classList.add("top3"); medal = "🍄"; } // Cogumelo
         
         row.innerHTML = `
           <td>${index + 1}º <span class="medal">${medal}</span></td>
           <td>${item.Nomes}</td> 
           <td>${item["Altura máxima (cm)"]}</td>
         `;
-        
-        row.addEventListener('mouseover', () => {
-          hoverSound.currentTime = 0;
-          hoverSound.play().catch(e => {});
-        });
-        
         tbody.appendChild(row);
       }
     }
+    
+    // Script do Confete Pixelado
+    function triggerConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const confettiCount = 150;
+        const confetti = [];
+        const colors = ['#fac000', '#e04040', '#40b040', '#5c94fc', '#fff'];
 
-    // Script para o fundo de Matriz
-    const canvas = document.getElementById('matrix-bg');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%';
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#0F0';
-      ctx.font = fontSize + 'px arial';
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
+        for (let i = 0; i < confettiCount; i++) {
+            confetti.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 10 + 5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speed: Math.random() * 5 + 2,
+                angle: Math.random() * Math.PI * 2,
+                spin: Math.random() - 0.5
+            });
         }
-        drops[i]++;
-      }
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach(p => {
+                p.y += p.speed;
+                p.angle += p.spin;
+                ctx.fillStyle = p.color;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.angle);
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+                if (p.y > canvas.height) {
+                    p.y = -20;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(drawConfetti);
+        }
+        drawConfetti();
     }
-    setInterval(drawMatrix, 33);
     
     window.addEventListener("DOMContentLoaded", loadRankingData);
   </script>
